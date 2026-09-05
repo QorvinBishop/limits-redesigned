@@ -40,6 +40,7 @@ class LimitGame {
     constructor() {
         this.calculator = null;
         this.yHelper = null; // Helper for tracking y-value
+        this.activeLevels = [...levels]; // Levels currently in play
         this.currentLevelIdx = 0;
         this.score = 0;
         this.wrongAttempts = 0;
@@ -61,7 +62,11 @@ class LimitGame {
             zoomButtons: false,
             lockViewport: true,
             backgroundColor: "#000000",
-            willReadFrequently: true
+            textColor: "#00ff41",
+            invertedColors: false,
+            showXAxis: true,
+            showYAxis: true,
+            showGrid: false
         });
         
         // Set default viewport
@@ -71,7 +76,8 @@ class LimitGame {
     }
 
     loadLevel(idx) {
-        const level = levels[idx];
+        if (!this.activeLevels[idx]) return;
+        const level = this.activeLevels[idx];
         this.wrongAttempts = 0;
         
         // Update Desmos
@@ -162,7 +168,7 @@ class LimitGame {
 
     submitGuess() {
         const guess = document.getElementById('guess-input').value.trim().toLowerCase();
-        const level = levels[this.currentLevelIdx];
+        const level = this.activeLevels[this.currentLevelIdx];
         const correct = level.answer.toLowerCase();
 
         if (guess === correct) {
@@ -176,11 +182,11 @@ class LimitGame {
         const bonus = this.wrongAttempts === 0 ? 50 : 10;
         this.score += 100 + bonus;
         this.updateStatus("LEVEL_SUCCESS: CORRUPTION_CLEARED", "#00ff41");
-        this.showOverlay("LEVEL_CLEARED", levels[this.currentLevelIdx].solution);
+        this.showOverlay("LEVEL_CLEARED", this.activeLevels[this.currentLevelIdx].solution);
         
         // Save progress
-        if (!this.progress.completed.includes(levels[this.currentLevelIdx].id)) {
-            this.progress.completed.push(levels[this.currentLevelIdx].id);
+        if (!this.progress.completed.includes(this.activeLevels[this.currentLevelIdx].id)) {
+            this.progress.completed.push(this.activeLevels[this.currentLevelIdx].id);
         }
         this.progress.score = this.score;
         this.saveProgress();
@@ -193,7 +199,7 @@ class LimitGame {
         
         if (this.wrongAttempts >= this.maxAttempts) {
             this.updateStatus("CRITICAL_ERROR: SYSTEM_FAILURE", "#ff003c");
-            this.showOverlay("GAME_OVER", levels[this.currentLevelIdx].solution);
+            this.showOverlay("GAME_OVER", this.activeLevels[this.currentLevelIdx].solution);
         } else {
             this.updateStatus(`ERROR: GLITCH_DETECTED (${this.wrongAttempts}/${this.maxAttempts})`, "#ff003c");
         }
@@ -206,7 +212,7 @@ class LimitGame {
         body.classList.add('glitch-active', 'glitch-shake');
         
         // Add random perturbation to graph
-        const level = levels[this.currentLevelIdx];
+        const level = this.activeLevels[this.currentLevelIdx];
         this.calculator.setExpression({
             id: 'graph',
             latex: level.desmos + `+ ${Math.random() * 0.5 * intensity}`,
@@ -255,7 +261,7 @@ class LimitGame {
     }
 
     nextLevel() {
-        this.currentLevelIdx = (this.currentLevelIdx + 1) % levels.length;
+        this.currentLevelIdx = (this.currentLevelIdx + 1) % this.activeLevels.length;
         document.getElementById('completion-overlay').style.display = 'none';
         document.getElementById('body').classList.remove('glitch-active');
         this.loadLevel(this.currentLevelIdx);
@@ -269,6 +275,9 @@ class LimitGame {
 
     updateUI() {
         document.getElementById('score-val').textContent = this.score;
+        document.getElementById('level-idx').textContent = this.currentLevelIdx + 1;
+        document.getElementById('total-levels').textContent = this.activeLevels.length;
+        
         const stars = document.querySelectorAll('.star');
         stars.forEach((s, i) => {
             if (i < Math.floor(this.score / 200)) s.classList.add('earned');
@@ -291,10 +300,18 @@ class LimitGame {
     }
 
     filterLevels(type) {
-        // Stub for V1.0 - just shows status
+        if (type === 'mixed') {
+            this.activeLevels = [...levels];
+        } else {
+            this.activeLevels = levels.filter(l => l.type === type);
+        }
+        
+        this.currentLevelIdx = 0;
+        this.updateUI();
+        this.loadLevel(this.currentLevelIdx);
         this.updateStatus(`MODE_SELECTED: ${type.toUpperCase()}`, "#fff");
     }
 }
 
-// Initialize Game
-const game = new LimitGame();
+// Initialize Game and expose to window for HTML event handlers
+window.game = new LimitGame();
