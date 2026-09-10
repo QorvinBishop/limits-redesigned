@@ -1,98 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Limit Game</title>
-    <!-- Load Math.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Explorer</title>
+    <link rel="stylesheet" href="global.css">
     <style>
-        /* Your CSS styles here */
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            padding: 2em;
+            text-align: center;
+        }
+        .page-link {
+            display: inline-block;
+            margin: 1em;
+            padding: 1em 2em;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .page-link:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-    <!-- Your HTML structure here -->
-    <script>
-        // Your JavaScript code here
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Limit Glitch V1.0 - Calculus Learning Game</title>
-
-    <!-- Desmos API v1.12 -->
-    <script src="https://www.desmos.com/api/v1.12/calculator.js?apiKey=96521a4ac4da457faf78d413efb60a90"></script>
-    
-    <!-- KaTeX for beautiful math rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-
-    <link rel="stylesheet" href="style.css">
-</head>
-<body id="body">
-
-    <div id="noise-overlay"></div>
-
-    <div id="top-bar">
-        <div class="brand">LIMIT_GLITCH v1.0</div>
-        <div class="stats">
-            <span>SCORE: <span id="score-val">0</span></span>
-            <span>LEVEL: <span id="level-idx">1</span>/<span id="total-levels">3</span></span>
-            <div id="stars">
-                <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-            </div>
+    <div class="navbar">
+        <div>
+            <a href="index.html">Home</a>
+            <a href="page1.html">The Portal Trap</a>
+            <a href="v1/index.html">Limit Glitch (V1)</a>
         </div>
     </div>
 
-    <div id="mode-selector">
-        <button class="secondary" onclick="game.filterLevels('removable')">REMOVABLE</button>
-        <button class="secondary" onclick="game.filterLevels('infinite')">INFINITE</button>
-        <button class="secondary" onclick="game.filterLevels('mixed')">MIXED</button>
-        <button class="secondary" onclick="game.resetProgress()" style="margin-left: auto; border-color: #666; color: #666;">RESET</button>
+    <div class="container">
+        <h1>Welcome to the Interactive Calculus Explorer!</h1>
+        <p>This website is designed to help high school students understand complex calculus concepts through interactive visualizations and game-like experiences.</p>
+        <p>Explore the fascinating world of limits, derivatives, and integrals in a fun and engaging way.</p>
+
+        <h2>Our Modules:</h2>
+        <a href="page1.html" class="page-link">The Portal Trap 🌀 (Limits)</a>
+        <a href="v1/index.html" class="page-link">Limit Glitch (V1)</a>
+        <!-- Add more module links here as they are developed -->
     </div>
-
-    <div id="game-container">
-        <div id="calculator"></div>
-        
-        <div id="control-panel">
-            <div class="level-info">
-                <h2 id="level-name">Loading...</h2>
-                <div class="math-display">
-                    <span id="func-display">f(x) = ...</span><br>
-                    <small>Target: <span id="target-x-display">?</span></small>
-                </div>
-                <div id="coord-display">x: 0.00, y: 0.00</div>
-            </div>
-
-            <div class="inputs">
-                <div class="slider-container">
-                    <label>Explore Approach:</label>
-                    <input type="range" id="x-slider" min="-10" max="10" step="0.01" value="0">
-                </div>
-                
-                <div class="guess-container">
-                    <input type="text" id="guess-input" placeholder="Enter Limit Value (or 'DNE')">
-                    <button onclick="game.submitGuess()">SUBMIT</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="status-bar">
-        STATUS: <span id="status-msg">SYSTEM_READY</span>
-    </div>
-
-    <!-- Completion Overlay -->
-    <div id="completion-overlay" class="overlay">
-        <h1 id="completion-title">LEVEL_CLEARED</h1>
-        <div id="solution-display"></div>
-        <div style="margin-top: 20px; display: flex; gap: 10px;">
-            <button onclick="game.nextLevel()">NEXT_LEVEL</button>
-            <button class="secondary" onclick="game.closeOverlay()">REPLAY</button>
-        </div>
-    </div>
-
-    <script defer src="script.js"></script>
-<!--8041989 (V1.0: Basic working Limit Glitch prototype with 3 levels)-->
 </body>
 </html>
