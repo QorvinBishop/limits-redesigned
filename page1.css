@@ -8,6 +8,7 @@
     --button-bg-light: #00796b;
     --button-text-light: #ffffff;
     --button-hover-light: #004d40;
+        --button-hover-tint-light: rgba(0, 121, 107, 0.1); /* Moved here */
 
     --bg-color-dark: #263238; /* Dark Blue Grey */
     --text-color-dark: #b2ebf2; /* Light Cyan */
@@ -18,6 +19,8 @@
     --button-bg-dark: #00bcd4;
     --button-text-dark: #263238;
     --button-hover-dark: #00838f;
+        --button-hover-tint-dark: rgba(0, 188, 212, 0.1); /* Moved here */
+
 
     --current-bg-color: var(--bg-color-light);
     --current-text-color: var(--text-color-light);
@@ -28,6 +31,7 @@
     --current-button-bg: var(--button-bg-light);
     --current-button-text: var(--button-text-light);
     --current-button-hover: var(--button-hover-light);
+        --current-button-hover-tint: var(--button-hover-tint-light); 
 }
 
 body.dark-theme {
@@ -40,6 +44,7 @@ body.dark-theme {
     --current-button-bg: var(--button-bg-dark);
     --current-button-text: var(--button-text-dark);
     --current-button-hover: var(--button-hover-dark);
+    --current-button-hover-tint: var(--button-hover-tint-dark);
 }
 
 body {
@@ -108,14 +113,56 @@ h1, h2 {
 }
 
 input[type="number"],
-input[type="text"],
-.mc-options input[type="radio"] + label {
+input[type="text"] {
     padding: 0.8em;
-    margin-right: 0.5em;
+    margin: 0.5em;
     border: 1px solid var(--current-border-color);
     border-radius: 4px;
     background-color: var(--current-section-bg);
     color: var(--current-text-color);
+}
+
+.mc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: left;
+    margin: 0.0 0;
+}
+
+.mc-options label {
+    display: inline-flex;
+    padding: 0.55em 0.9em;
+    border: 1px solid var(--current-border-color);
+    border-radius: 4px;
+    background-color: var(--current-section-bg);
+    color: var(--current-text-color);
+    cursor: pointer;
+}
+
+.mc-options input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 1. Style the label block dynamically when its preceding radio button is checked */
+.mc-options input[type="radio"]:checked + label {
+  background-color: var(--current-button-bg);
+  color: var(--current-button-text);
+  border-color: var(--current-button-bg);
+  filter: brightness(0.8); 
+}
+
+/* 2. Hover state - ONLY triggers if its preceding radio button is NOT checked */
+.mc-options input[type="radio"]:not(:checked) + label:hover {
+  border-color: var(--current-button-bg);
+  background-color: var(--current-button-hover-tint); 
+}
+
+.dark-theme .mc-options label:hover {
+  background-color: rgba(0, 188, 212, 0.1);
 }
 
 button {

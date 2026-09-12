@@ -44,9 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsMenu: false,
             zoomButtons: false,
             lockViewport: true,
-            xAxis: true,
-            yAxis: true,
-            grid: true,
+            showXAxis: true,
+            showYAxis: false,
+            showGrid: false,
             backgroundColor: '#263238' // Dark background for the graph
         });
         console.log("calculator1 assigned:", calculator1);
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'car_tracer',
             latex: '(a,0)',
             color: Desmos.Colors.ORANGE,
-            pointStyle: Desmos.PointStyles.POINT
+            pointStyle: 'POINT'
         });
 
         calculator1.setMathBounds({
@@ -92,7 +92,7 @@ function updateDesmosTheme(isDark) {
     // Dynamically set background and invertedColors
     calculator1.setOptions({
         backgroundColor: isDark ? '#263238' : '#e0f7fa',
-        invertedColors: isDark
+        textColor: isDark ? '#e0f7fa' : '#263238'
     });
 }
 
