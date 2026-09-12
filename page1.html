@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,7 @@
     <!-- KaTeX for beautiful math rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" 
-            onload="renderMathInElement(document.body, {
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
                         delimiters: [
                             {left: '$$', right: '$$', display: true},
                             {left: '$', right: '$', display: false},
@@ -22,6 +22,7 @@
                         throwOnError: false
                     });"></script>
 </head>
+
 <body>
     <div class="navbar">
         <div>
@@ -34,17 +35,19 @@
 
     <div class="container">
         <h1>The Portal Trap</h1>
-        <p class="intro-text">Welcome to Page 1 of your interactive calculus journey! Let's explore how a limit can point to one destination, even if reality suddenly warps at the exact target spot.</p>
+        <p class="intro-text">Welcome to Page 1 of your interactive calculus journey! Let's explore how a limit can
+            point to one destination, even if reality suddenly warps at the exact target spot.</p>
 
         <div class="lesson-section" id="section-1">
             <h2>Scenario: The Glitchy Portal</h2>
-            <p>Imagine you are driving a car along a perfectly flat road. But right at the 5-meter mark, someone has placed a glitchy portal on the ground.</p>
-            <ul>
-                <li>The target point $x$: The 5-meter mark ($x = 5$).</li>
-                <li>The function $f(x)$: The height of your car above the ground.</li>
-            </ul>
             <div id="desmos-graph-1" class="desmos-graph"></div>
-            <p class="question">There's a car driving along the ground in a 2D world (horizontal and height). We know it will be on the ground for all $x \neq 5$. However, the camera inconveniently malfunctions when the car is at $x = 5$. What do you expect the car's height to be (answer in meters)?</p>
+            <div class="question">
+                <p>Imagine you are driving a car along a perfectly flat road. The position of the car is at
+                $x$ meters, and the height of the car is modeled by the blue function $f(x)$ above.</p> 
+                <p>We know the car will be on the ground ($f(x) = 0$) for all $x \neq 5$.</p>
+                <p>However, the camera (inconveniently) malfunctions when the car is at $x = 5$.</p>
+                <p>What do you expect the car's height to be at $x = 5$ (in meters)?</p>
+            </div>
             <input type="number" id="guess-height" placeholder="Your guess in meters">
             <button id="submit-guess">Submit Guess</button>
             <button id="hint-1" class="secondary">Hint</button>
@@ -53,8 +56,10 @@
         </div>
 
         <div class="lesson-section hidden" id="section-2">
-            <h2>The Microsecond Drop (The Actual Value)</h2>
-            <p>The limit tells us what height we expect to be at based on the surrounding path. But the exact moment your front tires roll onto $x = 5$, ZAP!</p>
+            <h2>The Actual Value</h2>
+            <div id="desmos-graph-2" class="desmos-graph"></div>
+            <p>The limit tells us what height we expect to be at based on the surrounding path. But the exact moment
+                your front tires roll onto $x = 5$, ZAP!</p>
             <p>The portal triggers instantly, teleporting your car exactly 1 meter up into the air.</p>
             <p class="math-display">$$f(5) = 1\text{ meter}$$</p>
             <p>A split-second later, at $x = 5.01$, you are past the portal and back on the ground at 0 meters.</p>
@@ -73,14 +78,18 @@
 
         <div class="lesson-section hidden" id="section-3">
             <h2>The Calculus Takeaway</h2>
-            <p>The limit looks at the journey, while the actual value looks at the destination. Because the journey from both sides expected the ground, the limit is 0. But because of the portal, the actual value is 1.</p>
+            <p>The limit looks at the journey, while the actual value looks at the destination. Because the journey from
+                both sides expected the ground, the limit is 0. But because of the portal, the actual value is 1.</p>
             <p class="math-display">$$\lim_{x \to 5} f(x) = 0 \quad \neq \quad f(5) = 1$$</p>
-            <p>In calculus, this is called a <span class="highlight">removable discontinuity</span>. The road has a perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
-            <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value at that exact point is different or undefined.</p>
+            <p>In calculus, this is called a <span class="highlight">removable discontinuity</span>. The road has a
+                perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
+            <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value at
+                that exact point is different or undefined.</p>
         </div>
 
     </div>
 
     <script defer src="page1.js"></script>
 </body>
+
 </html>

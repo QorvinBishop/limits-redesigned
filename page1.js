@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initDesmosGraph(); // Initialize Desmos on load
+    initDesmosGraph2(); // Initialize the second graph on load so it appears when section 2 is revealed
 
     // Initialize Desmos theme based on loaded theme
     updateDesmosTheme(savedTheme === 'dark');
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     section3.classList.add('hidden');
 
     var calculator1;
+    var calculator2;
 
     function initDesmosGraph() {
         const elt1 = document.getElementById('desmos-graph-1');
@@ -47,28 +49,48 @@ document.addEventListener('DOMContentLoaded', () => {
             showXAxis: true,
             showYAxis: false,
             showGrid: false,
-            backgroundColor: '#263238' // Dark background for the graph
+            backgroundColor: '#263238', // Dark background for the graph
+            pointsOfInterest: false,
         });
         console.log("calculator1 assigned:", calculator1);
 
 
         // Function for the road (y=0 with a hole at x=5, point at (5,1))
-        calculator1.setExpression({
-            id: 'road',
-            latex: 'y=0\{x!=5\}',
-            color: Desmos.Colors.BLUE
+        calculator1.setExpression({ 
+            id: 'road', 
+            latex: 'f\\left(x\\right)=0\\left\\{\\left|x-5\\right|>0.1\\right\\}', 
+            color: Desmos.Colors.BLUE ,
+            lineWidth: 5
         });
+
         calculator1.setExpression({
             id: 'portal_point',
             latex: '(5,1)',
-            color: Desmos.Colors.RED,
-            pointStyle: 'POINT'
+            color: Desmos.Colors.BLUE,
+            pointStyle: 'POINT',
+            pointSize: 15,
         });
+
+        calculator1.setExpression({
+            id: 'hole_discontinuity',
+            latex: '(5,0)',
+            color: Desmos.Colors.BLUE,
+            pointStyle: Desmos.Styles.OPEN,
+            pointSize: 15,
+        });
+
         calculator1.setExpression({
             id: 'car_tracer',
             latex: '(a,0)',
-            color: Desmos.Colors.ORANGE,
+            color: Desmos.Colors.RED,
             pointStyle: 'POINT'
+        });
+
+        calculator1.setExpression({
+            id: 'blocked_camera',
+            latex: 'x=5',
+            color: Desmos.Colors.PURPLE,
+            lineWidth: 15,
         });
 
         calculator1.setMathBounds({
@@ -78,6 +100,65 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentCarX = 2;
     calculator1.setExpression({ id: 'a', latex: `a=${currentCarX}` });
 }
+
+    function initDesmosGraph2() {
+        const elt2 = document.getElementById('desmos-graph-2');
+        if (!elt2) {
+            console.error("Second Desmos graph element not found!");
+            return;
+        }
+
+        calculator2 = Desmos.GraphingCalculator(elt2, {
+            keypad: false,
+            expressions: true,
+            expressionsCollapsed: true,
+            settingsMenu: false,
+            zoomButtons: false,
+            lockViewport: true,
+            showXAxis: true,
+            showYAxis: false,
+            showGrid: false,
+            backgroundColor: '#263238',
+        });
+
+        calculator2.setExpression({ 
+            id: 'road-2', 
+            latex: 'f(x)=\\left\\{x=5:1,\\ 0\\right\\}', 
+            color: Desmos.Colors.BLUE,
+            lineWidth: 5
+        });
+
+        calculator2.setExpression({
+            id: 'portal_point_2',
+            latex: '(5,1)',
+            color: Desmos.Colors.BLUE,
+            pointSize: 15,
+            //label: 'asdf',
+            //showLabel: true,
+        });
+
+        calculator2.setExpression({
+            id: 'hole_discontinuity_2',
+            latex: '(5,0)',
+            color: Desmos.Colors.BLUE,
+            pointStyle: Desmos.Styles.OPEN,
+            pointSize: 15,
+        });
+
+        calculator2.setExpression({
+            id: 'car_tracer_2',
+            latex: '(a,f(a))',
+            color: Desmos.Colors.RED,
+            pointStyle: 'POINT'
+        });
+
+        calculator2.setMathBounds({
+            left: 0, right: 10, bottom: -2, top: 2
+        });
+
+        let currentCarX = 2;
+        calculator2.setExpression({ id: 'a_2', latex: `a=${currentCarX}` });
+    }
 
 function updateDesmosTheme(isDark) {
     console.log("updateDesmosTheme called.");
@@ -91,6 +172,10 @@ function updateDesmosTheme(isDark) {
 
     // Dynamically set background and invertedColors
     calculator1.setOptions({
+        backgroundColor: isDark ? '#263238' : '#e0f7fa',
+        textColor: isDark ? '#e0f7fa' : '#263238'
+    });
+    calculator2.setOptions({
         backgroundColor: isDark ? '#263238' : '#e0f7fa',
         textColor: isDark ? '#e0f7fa' : '#263238'
     });
