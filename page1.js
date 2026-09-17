@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initDesmosGraph(); // Initialize Desmos on load
     initDesmosGraph2(); // Initialize the second graph on load so it appears when section 2 is revealed
+    initDesmosGraph3(); // Initialize the third graph for the limit discussion
 
     // Initialize Desmos theme based on loaded theme
     updateDesmosTheme(savedTheme === 'dark');
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var calculator1;
     var calculator2;
+    var calculator3;
 
     function initDesmosGraph() {
         const elt1 = document.getElementById('desmos-graph-1');
@@ -160,6 +162,49 @@ document.addEventListener('DOMContentLoaded', () => {
         calculator2.setExpression({ id: 'a_2', latex: `a=${currentCarX}` });
     }
 
+    function initDesmosGraph3() {
+        const elt3 = document.getElementById('desmos-graph-3');
+        if (!elt3) {
+            console.error("Third Desmos graph element not found!");
+            return;
+        }
+
+        const defaultBounds = {
+            left: -2,
+            right: 2,
+            bottom: -1,
+            top: 1
+        };
+
+        calculator3 = Desmos.GraphingCalculator(elt3, {
+            keypad: false,
+            expressions: false,
+            settingsMenu: false,
+            zoomButtons: true,
+            lockViewport: false,
+            showXAxis: true,
+            showYAxis: true,
+            showGrid: true,
+            backgroundColor: '#263238',
+        });
+
+        calculator3.setExpression({
+            id: 'arbitrary-function',
+            latex: 'f(x)=x\\sin\\left(\\frac{1}{x}\\right)',
+            color: Desmos.Colors.BLUE,
+            lineWidth: 3
+        });
+
+        calculator3.setMathBounds(defaultBounds);
+
+        const resetZoomBtn = document.getElementById('reset-zoom-btn');
+        if (resetZoomBtn) {
+            resetZoomBtn.addEventListener('click', () => {
+                calculator3.setMathBounds(defaultBounds);
+            });
+        }
+    }
+
 function updateDesmosTheme(isDark) {
     console.log("updateDesmosTheme called.");
     console.log("Is calculator1 defined?", calculator1 !== undefined && calculator1 !== null);
@@ -179,6 +224,12 @@ function updateDesmosTheme(isDark) {
         backgroundColor: isDark ? '#263238' : '#e0f7fa',
         textColor: isDark ? '#e0f7fa' : '#263238'
     });
+    if (calculator3) {
+        calculator3.setOptions({
+            backgroundColor: isDark ? '#263238' : '#e0f7fa',
+            textColor: isDark ? '#e0f7fa' : '#263238'
+        });
+    }
 }
 
 
@@ -252,4 +303,5 @@ function updateDesmosTheme(isDark) {
         document.getElementById('mc-false').checked = true;
         submitMcBtn.click();
     });
+    
 });

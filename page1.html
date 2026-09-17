@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Portal Trap</title>
+    <title>The Portal</title>
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="page1.css">
     <!-- Desmos API v1.12 -->
@@ -27,19 +27,18 @@
     <div class="navbar">
         <div>
             <a href="index.html">Home</a>
-            <a href="page1.html">The Portal Trap</a>
+            <a href="page1.html">The Portal</a>
             <a href="v1/index.html">Limit Glitch (V1)</a>
         </div>
         <button id="theme-toggle">Toggle Theme</button>
     </div>
 
     <div class="container">
-        <h1>The Portal Trap</h1>
-        <p class="intro-text">Welcome to Page 1 of your interactive calculus journey! Let's explore how a limit can
-            point to one destination, even if reality suddenly warps at the exact target spot.</p>
+        <h1>The Portal</h1>
+        <p class="intro-text">Welcome to Page 1 of your interactive calculus journey: limits!</p>
 
         <div class="lesson-section" id="section-1">
-            <h2>Scenario: The Glitchy Portal</h2>
+            <h2>Scenario: The Car</h2>
             <div id="desmos-graph-1" class="desmos-graph"></div>
             <div class="question">
                 <p>Imagine you are driving a car along a perfectly flat road. The position of the car is at
@@ -78,8 +77,22 @@
 
         <div class="lesson-section hidden" id="section-3">
             <h2>The Calculus Takeaway</h2>
-            <p>The limit looks at the journey, while the actual value looks at the destination. Because the journey from
-                both sides expected the ground, the limit is 0. But because of the portal, the actual value is 1.</p>
+            <p>The limit looks at the journey, while the actual value looks at the destination. Because the journey of the car from
+                both sides of x = 5 meters expected the ground, the limit is 0. But because of the portal, the actual value is 1.</p>
+            <p>More generally, we can say that a limit is the value that a function approaches as the input gets closer and closer to a specific point.</p>
+            <p>Take a look at the graph below: try zooming in to x = 0 to see what happens.</p>
+            
+            <div id="desmos-graph-3" class="desmos-graph"></div>
+            <button id="reset-zoom-btn">Reset Zoom</button>
+            <div class="question">
+                <p>What does the function approach as x approaches 0?</p>
+            </div>
+            <input type="number" id="guess-limit" placeholder="Answer:">
+            <button id="submit-limit">Submit Guess</button>
+            <button id="hint-3" class="secondary">Hint</button>
+            <button id="reveal-answer-3" class="secondary">Reveal Answer</button>
+            <div id="feedback-3" class="feedback"></div>
+
             <p class="math-display">$$\lim_{x \to 5} f(x) = 0 \quad \neq \quad f(5) = 1$$</p>
             <p>In calculus, this is called a <span class="highlight">removable discontinuity</span>. The road has a
                 perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
