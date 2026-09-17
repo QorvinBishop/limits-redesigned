@@ -304,4 +304,32 @@ function updateDesmosTheme(isDark) {
         submitMcBtn.click();
     });
     
+    // Question 3 Logic
+    const submitMcBtn3 = document.getElementById('submit-mc-3');
+    const hint3Btn = document.getElementById('hint-3');
+    const revealAnswer3Btn = document.getElementById('reveal-answer-3');
+    const feedback3 = document.getElementById('feedback-3');
+
+    submitMcBtn3.addEventListener('click', () => {
+        const selectedOption = document.querySelector('input[name="prediction-match-3"]:checked');
+        if (selectedOption && selectedOption.value === 'true') {
+            feedback3.innerHTML = '<p class="correct">Correct! The limit of the function as x approaches 0 is indeed 0. No matter how much you zoom in, the function approaches 0.</p>';
+            feedback3.classList.remove('incorrect');
+            feedback3.classList.add('correct');
+        } else {
+            feedback3.innerHTML = '<p class="incorrect">Not quite. Consider the behavior of the function as x approaches 0. No matter how much you zoom in, the function approaches 0.</p>';
+            feedback3.classList.remove('correct');
+            feedback3.classList.add('incorrect');
+        }
+    });
+
+    hint3Btn.addEventListener('click', () => {
+        feedback3.innerHTML = '<p class="feedback">Look at the graph above and scroll to zoom in on x = 0. What value does it seem to approach?</p>';
+        feedback3.classList.remove('correct', 'incorrect');
+    });
+
+    revealAnswer3Btn.addEventListener('click', () => {
+        document.getElementById('mc-true-3').checked = true;
+        submitMcBtn3.click();
+    });
 });
