@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsMenu: false,
             zoomButtons: false,
             lockViewport: true,
+            showResetButtonOnGraphpaper: true,
             showXAxis: true,
             showYAxis: false,
             showGrid: false,
@@ -67,73 +68,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Function for the road (y=0 with a hole at x=5, point at (5,1))
         calculator1.setExpression({
-        id: 'time',
-        latex: 't = 0',
-        playing: true,
-        loopMode: 'LOOP_FORWARD',
-        sliderSpeedMultiplier: 0.1
+            id: 'time',
+            latex: 't = 0',
+            playing: true,
+            loopMode: 'LOOP_FORWARD',
+            sliderSpeedMultiplier: 0.1
         });
-calculator1.setExpression({
-        id: 'cyanlist',
-        latex: 'C = [0, 0.2, 0.4, 0.6, 0.8, 1.0]',
-        });
-        calculator1.setExpression({
-        id: 'magentalist',
-        latex: 'M = [0.1, 0.3, 0.5, 0.7, 0.9]',
-        });
+        
         calculator1.controller.dispatch({
-  type: 'set-slider-animationperiod', 
-  id: 'time', 
-  animationPeriod: 20 // 2000ms = 2x speed
-});
+            type: 'set-slider-animationperiod', 
+            id: 'time', 
+            animationPeriod: 20 // 20ms = 0.02x speed
+        });
         // Create the flat line that glitches out at x = 5
         
         calculator1.setExpression({
-        id: 'glitched-flatline1',
-        latex: 'y = \\frac{(0.1t + 1) \\cdot \\sin(80(x - M[1]) - 0.1t)}{1 + 300(x-5)^2}',
-        color: '#38ffda', // Gives it a clean digital cyan look 38ffda
+            id: 'glitched-flatline1',
+            latex: 'y = \\frac{(0.1t + 1) \\cdot \\sin(80(x - 0.1) - 0.1t)}{1 + 300(x-5)^2}',
+            color: '#38ffda', // Gives it a clean digital cyan look 38ffda
         });
         calculator1.setExpression({
-        id: 'glitched-flatline2',
-        latex: 'y = \\frac{(0.01t + 1) \\cdot \\sin(80(x - C[1]) - 0.1t)}{1 + 300(x-5)^2}',
-        color: '#FF00FF', // Gives it a clean digital magenta look FF00FF
-        lineOpacity: 0.6
+            id: 'glitched-flatline2',
+            latex: 'y = \\frac{(0.01t + 1) \\cdot \\sin(80x - 0.1t)}{1 + 300(x-5)^2}',
+            color: '#FF00FF', // Gives it a clean digital magenta look FF00FF
+            lineOpacity: 0.6
         });
         
         calculator1.setExpression({ 
             id: 'road', 
-            latex: 'f(x)=0', 
+            latex: 'f\\left(x\\right)=\\left\\{x=5:10,0\\right\\}', 
             color: Desmos.Colors.BLUE ,
             lineWidth: 5
         });
 
         calculator1.setExpression({
             id: 'car_tracer',
-            latex: '(a,0)',
+            latex: '(a,f(a))',
             color: Desmos.Colors.RED,
             pointStyle: 'POINT'
         });
 
-        /*calculator1.setExpression({
-            id: 'blocked_camera',
-            latex: 'x=5',
-            color: Desmos.Colors.PURPLE,
-            lineWidth: 15,
-        });*/
-
-        // Example for the Signal Tear distortion on a sine wave
-        // 1. Initialize the animated time variable
-        // 1. Create and auto-start the animation clock
-
-
-
-
+        
         calculator1.setMathBounds({
             left: 0, right: 10, bottom: -2, top: 2
         });
-
+        
         let currentCarX = 2;
-    calculator1.setExpression({ id: 'a', latex: `a=${currentCarX}` });
+        calculator1.setExpression({ id: 'a', latex: `a=${currentCarX}` });
+        var newDefaultState = calculator1.getState();
+        calculator1.setDefaultState(newDefaultState);
 }
 
     function initDesmosGraph2() {
@@ -145,11 +128,11 @@ calculator1.setExpression({
 
         calculator2 = Desmos.GraphingCalculator(elt2, {
             keypad: false,
-            expressions: true,
-            expressionsCollapsed: true,
+            expressions: false,
             settingsMenu: false,
             zoomButtons: false,
             lockViewport: true,
+            showResetButtonOnGraphpaper: true,
             showXAxis: true,
             showYAxis: true,
             showGrid: false,
@@ -170,8 +153,6 @@ calculator1.setExpression({
             latex: '(5,1)',
             color: Desmos.Colors.BLUE,
             pointSize: 15,
-            //label: 'asdf',
-            //showLabel: true,
         });
 
         calculator2.setExpression({
@@ -191,11 +172,13 @@ calculator1.setExpression({
 
 
         calculator2.setMathBounds({
-            left: 0, right: 10, bottom: -2, top: 2
+            left: 0, right: 10, bottom: -1.5, top: 1.5
         });
 
         let currentCarX = 2;
         calculator2.setExpression({ id: 'a_2', latex: `a=${currentCarX}` });
+        var newDefaultState = calculator2.getState();
+        calculator2.setDefaultState(newDefaultState);
     }
 
     function initDesmosGraph3() {
@@ -215,7 +198,7 @@ calculator1.setExpression({
         calculator3 = Desmos.GraphingCalculator(elt3, {
             keypad: false,
             expressions: false,
-            settingsMenu: true,
+            settingsMenu: false,
             zoomButtons: true,
             lockViewport: false,
             showXAxis: true,
@@ -224,25 +207,19 @@ calculator1.setExpression({
             backgroundColor: '#263238',
             showResetButtonOnGraphpaper: true,
             trace: false,
-            mathBounds: { left: -10, right: 10, bottom: -10, top: 10 } 
         });
 
         calculator3.setExpression({
             id: 'arbitrary-function',
             latex: 'f(x)=x\\sin\\left(\\frac{1}{x}\\right) + 0.5',
-            color: '#2d70b3', // Adjust color based on theme
+            color: '#2d70b3',
             lineWidth: 3,
             lineOpacity: 0.8
         });
 
         calculator3.setMathBounds(defaultBounds);
-
-        const resetZoomBtn = document.getElementById('reset-zoom-btn');
-        if (resetZoomBtn) {
-            resetZoomBtn.addEventListener('click', () => {
-                calculator3.setMathBounds(defaultBounds);
-            });
-        }
+        var newDefaultState = calculator3.getState();
+        calculator3.setDefaultState(newDefaultState);
     }
 
 function updateDesmosTheme(isDark) {
@@ -288,6 +265,7 @@ function updateDesmosTheme(isDark) {
             feedback1.classList.add('correct');
             // Reveal section 2
             section2.classList.remove('hidden');
+            if (calculator2) { calculator2.resize(); }
             if (window.renderMathInElement) {
                 renderMathInElement(section2);
             }
@@ -323,6 +301,9 @@ function updateDesmosTheme(isDark) {
             feedback2.classList.add('correct');
             // Reveal section 3
             section3.classList.remove('hidden');
+
+            if (calculator3) { calculator3.resize(); }
+
             if (window.renderMathInElement) {
                 renderMathInElement(section3);
             }

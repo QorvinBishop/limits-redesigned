@@ -89,8 +89,7 @@
                 value is $1$.</p>
             <p>More generally, we can say that a limit is the value that a function approaches as the input gets closer
                 and closer to a specific point.</p>
-            <p>Take a look at the graph below: try zooming in (scroll on the graph) to $x = 0.5$ to see what happens.</p>
-            <button id="reset-zoom-btn">Reset Zoom</button>
+            <p>Take a look at the graph below: try zooming to $x = 0.5$ by scrolling on the graph or using the buttons to see what happens.</p>
             <div id="desmos-graph-3" class="desmos-graph"></div>
             
             <div class="question">
@@ -114,10 +113,10 @@
                 <p class="math-display">$$\lim_{x \to 5} f(x)=0$$</p>
                 <p>but the actual value at that exact point is different:</p>
                 <p class="math-display">$$f(5)=1$$</p>
-                <p>This mismatch is a <span class="highlight">removable discontinuity</span>: the graph has a hole at
-                    $(5,0)$, and the point is suddenly lifted to $(5,1)$.</p>
-                <p class="math-display">$$\lim_{x \to 5} f(x) = 0 \quad \neq \quad f(5) = 1$$</p>
-                <p>In calculus, this is called a <span class="highlight">removable discontinuity</span>. The road has a
+                <p>The graph at $x=5$ looks like it has a "hole" at
+                    $(5,0)$, where the actual function value is suddenly lifted to $(5,1)$. Holes are also known as <span class="highlight">removable discontinuities</span>. </p>
+                <p class="math-display">$$\lim_{x \to a} f(x) = L\quad \neq \quad f(a)$$</p>
+                <p>In general, a <span class="highlight">removable discontinuity</span> occurs when the limit exists but is not equal to the function value at that point. The road has a
                     perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
                 <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value
                     at
