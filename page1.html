@@ -28,7 +28,6 @@
         <div>
             <a href="index.html">Home</a>
             <a href="page1.html">The Portal</a>
-            <a href="v1/index.html">Limit Glitch (V1)</a>
         </div>
         <button id="theme-toggle">Dark Mode</button>
     </div>
@@ -39,14 +38,17 @@
 
         <div class="lesson-section" id="section-1">
             <h2>Scenario: The Car</h2>
-            <p>Imagine you are driving a car along a perfectly flat road. The position of the car is at
-                $x$ meters, and the height of the car is modeled by the blue function $f(x)$ below.</p> 
-                <p>We know the car will be on the ground ($f(x) = 0$) for all $x \neq 5$.</p>
-                <p>However, the camera (inconveniently) malfunctions when the car is at $x = 5$.</p>
+            <p>Imagine you are driving a car along a perfectly flat road. The variable $x$ represents the position of
+                the car in meters, and the the function $f(x)$ represents the car's height.</p>
+            <p>We know that the car stays flat on the ground (\(f(x) = 0\)) at every single point along the road for all
+                \(x \neq 5\).</p>
+            <p>However, the camera cannot capture the car's height at $x = 5$, leaving the car's height at \(x = 5\) a
+                mystery (inconveniently).</p>
             <div id="desmos-graph-1" class="desmos-graph"></div>
             <div class="question">
                 <p>What do you expect the car's height to be at $x = 5$ (in meters)?</p>
             </div>
+            <p>Feel free to drag the red dot (the car) and play around with the graph!</p>
             <input type="number" id="guess-height" placeholder="Your guess in meters">
             <button id="submit-guess">Submit Guess</button>
             <button id="hint-1" class="secondary">Hint</button>
@@ -56,13 +58,16 @@
 
         <div class="lesson-section hidden" id="section-2">
             <h2>The Actual Value</h2>
-            <div id="desmos-graph-2" class="desmos-graph"></div>
-            <p>The limit tells us what height we expect to be at based on the surrounding path. But the exact moment
-                your front tires roll onto $x = 5$, ZAP!</p>
-            <p>The portal triggers instantly, teleporting your car exactly 1 meter up into the air.</p>
+            
+            <p>The limit tells us what height we expect the car to be at based on its surrounding path. But the exact
+                moment
+                you hit $x = 5$, ZAP!</p>
+            <p>The portal triggers instantly, teleporting your car exactly $1$ meter up into the air. In math terms, </p>
             <p class="math-display">$$f(5) = 1\text{ meter}$$</p>
-            <p>Immediately after, you are past the portal and back on the ground at 0 meters.</p>
-            <p class="question">Compare the position of the car at 5 meters vs your prediction. Was it the same?</p>
+            <p>See this for yourself by carefully dragging the car (the point) to x = 5.</p>
+            <div id="desmos-graph-2" class="desmos-graph"></div>
+            <p>Immediately after, you are past the portal and back on the ground at $0$ meters.</p>
+            <p class="question">Compare the position of the car at $5$ meters vs your prediction. Was it the same?</p>
             <div class="mc-options">
                 <input type="radio" id="mc-true" name="prediction-match" value="true">
                 <label for="mc-true">Yes</label><br>
@@ -77,15 +82,19 @@
 
         <div class="lesson-section hidden" id="section-3">
             <h2>The Calculus Takeaway</h2>
-            <p>The limit looks at the journey, while the actual value looks at the destination. Because the journey of the car from
-                both sides of x = 5 meters expected the ground, the limit is 0. But because of the portal, the actual value is 1.</p>
-            <p>More generally, we can say that a limit is the value that a function approaches as the input gets closer and closer to a specific point.</p>
-            <p>Take a look at the graph below: try zooming in to x = 0 to see what happens.</p>
-            
-            <div id="desmos-graph-3" class="desmos-graph"></div>
+            <p>The limit looks at the journey, while the actual value looks at the destination. Because the journey of
+                the car from
+                both sides of $x = 5$ meters expected the ground, the limit is $0$. But because of the portal, the
+                actual
+                value is $1$.</p>
+            <p>More generally, we can say that a limit is the value that a function approaches as the input gets closer
+                and closer to a specific point.</p>
+            <p>Take a look at the graph below: try zooming in (scroll on the graph) to $x = 0.5$ to see what happens.</p>
             <button id="reset-zoom-btn">Reset Zoom</button>
+            <div id="desmos-graph-3" class="desmos-graph"></div>
+            
             <div class="question">
-                <p>What does the function approach as x approaches 0?</p>
+                <p>What does the function approach as $x$ approaches $ 0 $?</p>
             </div>
             <input type="number" id="guess-limit" placeholder="Answer:">
             <button id="submit-limit">Submit Guess</button>
@@ -95,23 +104,27 @@
             <div id="limit-reveal" class="hidden">
                 <p>In general, we write the limit of a function as the input approaches a value $a$ like this:</p>
                 <p class="math-display">$$\lim_{x \to a} f(x) = L$$</p>
-                <p>This means: as $x$ gets closer and closer to $a$, the function $f(x)$ gets closer and closer to $L$.</p>
+                <p>This means: as $x$ gets closer and closer to $a$, the function $f(x)$ gets closer and closer to $L$.
+                </p>
 
-                <p>For our car example, the function is essentially 0 for every nearby position except the one instant at $x=5$:</p>
+                <p>For our car example, the function is essentially $0$ for every nearby position except the one instant
+                    at $x=5$:</p>
                 <p class="math-display">$$f(x)=0 \quad \text{for all } x\neq 5, \qquad f(5)=1$$</p>
                 <p>So the road approaches the ground on both sides of $x=5$, which means</p>
                 <p class="math-display">$$\lim_{x \to 5} f(x)=0$$</p>
                 <p>but the actual value at that exact point is different:</p>
                 <p class="math-display">$$f(5)=1$$</p>
-                <p>This mismatch is a <span class="highlight">removable discontinuity</span>: the graph has a hole at $(5,0)$, and the point is suddenly lifted to $(5,1)$.</p>
+                <p>This mismatch is a <span class="highlight">removable discontinuity</span>: the graph has a hole at
+                    $(5,0)$, and the point is suddenly lifted to $(5,1)$.</p>
                 <p class="math-display">$$\lim_{x \to 5} f(x) = 0 \quad \neq \quad f(5) = 1$$</p>
-            <p>In calculus, this is called a <span class="highlight">removable discontinuity</span>. The road has a
-                perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
-            <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value at
-                that exact point is different or undefined.</p>
+                <p>In calculus, this is called a <span class="highlight">removable discontinuity</span>. The road has a
+                    perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
+                <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value
+                    at
+                    that exact point is different or undefined.</p>
             </div>
 
-            
+
         </div>
 
     </div>

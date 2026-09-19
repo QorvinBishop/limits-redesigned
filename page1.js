@@ -90,12 +90,12 @@ calculator1.setExpression({
         
         calculator1.setExpression({
         id: 'glitched-flatline1',
-        latex: 'y = \\frac{(0.2t + 2) \\cdot \\sin(80(x - M[1]) - 0.1t)}{1 + 30(x-5)^2}',
+        latex: 'y = \\frac{(0.1t + 1) \\cdot \\sin(80(x - M[1]) - 0.1t)}{1 + 300(x-5)^2}',
         color: '#38ffda', // Gives it a clean digital cyan look 38ffda
         });
         calculator1.setExpression({
         id: 'glitched-flatline2',
-        latex: 'y = \\frac{(0.02t + 2) \\cdot \\sin(80(x - C[1]) - 0.1t)}{1 + 30(x-5)^2}',
+        latex: 'y = \\frac{(0.01t + 1) \\cdot \\sin(80(x - C[1]) - 0.1t)}{1 + 300(x-5)^2}',
         color: '#FF00FF', // Gives it a clean digital magenta look FF00FF
         lineOpacity: 0.6
         });
@@ -106,13 +106,7 @@ calculator1.setExpression({
             color: Desmos.Colors.BLUE ,
             lineWidth: 5
         });
-        /*
-        calculator1.setExpression({
-  id: 'fading-graph',
-  latex: 'f(x) \\left\\{ 0 \\le x \\le 5 \\right\\}',
-  lineOpacity: '[1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]'
-});
-*/
+
         calculator1.setExpression({
             id: 'car_tracer',
             latex: '(a,0)',
@@ -160,6 +154,8 @@ calculator1.setExpression({
             showYAxis: true,
             showGrid: false,
             backgroundColor: '#263238',
+            trace: false,
+            pointsOfInterest: true,
         });
 
         calculator2.setExpression({ 
@@ -188,10 +184,11 @@ calculator1.setExpression({
 
         calculator2.setExpression({
             id: 'car_tracer_2',
-            latex: '(a,f(a))',
+            latex: '\\left(a,0.2 * \\operatorname{round}\\left(f\\left(a\\right) / 0.2\\right)\\right)',
             color: Desmos.Colors.RED,
             pointStyle: 'POINT'
         });
+
 
         calculator2.setMathBounds({
             left: 0, right: 10, bottom: -2, top: 2
@@ -211,27 +208,31 @@ calculator1.setExpression({
         const defaultBounds = {
             left: -2,
             right: 2,
-            bottom: -1,
-            top: 1
+            bottom: -0.5,
+            top: 1.5
         };
 
         calculator3 = Desmos.GraphingCalculator(elt3, {
             keypad: false,
             expressions: false,
-            settingsMenu: false,
+            settingsMenu: true,
             zoomButtons: true,
             lockViewport: false,
             showXAxis: true,
             showYAxis: true,
             showGrid: true,
             backgroundColor: '#263238',
+            showResetButtonOnGraphpaper: true,
+            trace: false,
+            mathBounds: { left: -10, right: 10, bottom: -10, top: 10 } 
         });
 
         calculator3.setExpression({
             id: 'arbitrary-function',
-            latex: 'f(x)=x\\sin\\left(\\frac{1}{x}\\right)',
-            color: Desmos.Colors.BLUE,
-            lineWidth: 3
+            latex: 'f(x)=x\\sin\\left(\\frac{1}{x}\\right) + 0.5',
+            color: '#2d70b3', // Adjust color based on theme
+            lineWidth: 3,
+            lineOpacity: 0.8
         });
 
         calculator3.setMathBounds(defaultBounds);
@@ -270,7 +271,6 @@ function updateDesmosTheme(isDark) {
         });
     }
 }
-
 
 
     // Question 1 Logic
@@ -361,8 +361,8 @@ function updateDesmosTheme(isDark) {
 
     submitLimitBtn.addEventListener('click', () => {
         const guess = parseFloat(guessLimitInput.value);
-        if (Math.abs(guess) < 0.0001) {
-            feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0 as x approaches 0. That is the limit.</p>';
+        if (Math.abs(guess - 0.5) < 0.0001) {
+            feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0.5 as x approaches 0. That is the limit.</p>';
             feedback3.classList.remove('incorrect');
             feedback3.classList.add('correct');
             revealLimitExplanation();
