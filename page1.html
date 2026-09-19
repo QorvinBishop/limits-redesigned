@@ -45,6 +45,21 @@
             <p>However, the camera cannot capture the car's height at $x = 5$, leaving the car's height at \(x = 5\) a
                 mystery (inconveniently).</p>
             <div id="desmos-graph-1" class="desmos-graph"></div>
+
+            <div class="question">
+                <p>What is the car's height at $x = 4.999$ meters?</p>
+            </div>
+            <input type="number" id="guess-height-4999" placeholder="Your guess in meters">
+            <button id="submit-guess-4999">Submit Guess</button>
+            <div id="feedback-4999" class="feedback"></div>
+
+            <div class="question">
+                <p>What is the car's height at $x = 5.001$ meters?</p>
+            </div>
+            <input type="number" id="guess-height-5001" placeholder="Your guess in meters">
+            <button id="submit-guess-5001">Submit Guess</button>
+            <div id="feedback-5001" class="feedback"></div>
+
             <div class="question">
                 <p>What do you expect the car's height to be at $x = 5$ (in meters)?</p>
             </div>
@@ -58,11 +73,12 @@
 
         <div class="lesson-section hidden" id="section-2">
             <h2>The Actual Value</h2>
-            
+
             <p>The limit tells us what height we expect the car to be at based on its surrounding path. But the exact
                 moment
                 you hit $x = 5$, ZAP!</p>
-            <p>The portal triggers instantly, teleporting your car exactly $1$ meter up into the air. In math terms, </p>
+            <p>The portal triggers instantly, teleporting your car exactly $1$ meter up into the air. In math terms,
+            </p>
             <p class="math-display">$$f(5) = 1\text{ meter}$$</p>
             <p>See this for yourself by carefully dragging the car (the point) to x = 5.</p>
             <div id="desmos-graph-2" class="desmos-graph"></div>
@@ -89,9 +105,10 @@
                 value is $1$.</p>
             <p>More generally, we can say that a limit is the value that a function approaches as the input gets closer
                 and closer to a specific point.</p>
-            <p>Take a look at the graph below: try zooming to $x = 0.5$ by scrolling on the graph or using the buttons to see what happens.</p>
+            <p>Take a look at the graph below: try zooming to $x = 0.5$ by scrolling on the graph or using the buttons
+                to see what happens.</p>
             <div id="desmos-graph-3" class="desmos-graph"></div>
-            
+
             <div class="question">
                 <p>What does the function approach as $x$ approaches $ 0 $?</p>
             </div>
@@ -99,24 +116,64 @@
             <button id="submit-limit">Submit Guess</button>
             <button id="reveal-answer-3" class="secondary">Reveal Answer</button>
             <div id="feedback-3" class="feedback"></div>
+        </div>
+        <div class="lesson-section hidden" id="section-4">
+            <h2>General Limit Notation</h2>
+            <p>In general, we write the limit of a function as the input approaches a value $a$ like this:</p>
+            <p class="math-display">$$\lim_{x \to a} f(x) = L$$</p>
+            <p>This means: as $x$ gets closer and closer to $a$, the function $f(x)$ gets closer and closer to $L$.</p>
+
+            <div id="limit-5-reveal" class="hidden">
+                <p>Let's go back to our car example, where $f(x)$ represents the car's height.</p>
+                <div class="question">
+                    <p>What is $\lim_{x \to 4.999} f(x)$ equal to?</p>
+                </div>
+                <input type="number" id="guess-limit-5" placeholder="Answer:">
+                <button id="submit-limit-5">Submit</button>
+                <button id="reveal-answer-5" class="secondary">Reveal Answer</button>
+                <div id="feedback-5" class="feedback"></div>
+            </div>
+
+            <div id="a-value-reveal" class="hidden">
+                <p>Continuing with our car example, where (\(f(x) = 0\)) for all
+                    \(x \neq 5\) and $f(5) = 1$.</p>
+                <div class="question">
+                    <p>Suppose $\lim_{x \to a} f(x) = 0$. Which values of $a$ could make this statement true? Select all
+                        that apply.</p>
+                </div>
+                <div class="multi-select-options">
+                    <input type="checkbox" id="a-neg-2" name="possible-a" value="-2">
+                    <label for="a-neg-2">$a=-2$</label><br>
+                    <input type="checkbox" id="a-zero" name="possible-a" value="0">
+                    <label for="a-zero">$a=0$</label><br>
+                    <input type="checkbox" id="a-three" name="possible-a" value="3">
+                    <label for="a-three">$a=3$</label><br>
+                    <input type="checkbox" id="a-five" name="possible-a" value="5">
+                    <label for="a-five">$a=5$</label><br>
+                    <input type="checkbox" id="a-pi" name="possible-a" value="\pi">
+                    <label for="a-pi">$a=\pi$</label><br>
+                    <input type="checkbox" id="a-decimal" name="possible-a" value="42.67">
+                    <label for="a-decimal">$a=42.67$</label>
+                </div>
+                <button id="submit-multi-a">Submit Selection</button>
+                <button id="reveal-answer-a" class="secondary">Reveal All</button>
+                <div id="feedback-a" class="feedback"></div>
+            </div>
 
             <div id="limit-reveal" class="hidden">
-                <p>In general, we write the limit of a function as the input approaches a value $a$ like this:</p>
-                <p class="math-display">$$\lim_{x \to a} f(x) = L$$</p>
-                <p>This means: as $x$ gets closer and closer to $a$, the function $f(x)$ gets closer and closer to $L$.
-                </p>
 
-                <p>For our car example, the function is essentially $0$ for every nearby position except the one instant
-                    at $x=5$:</p>
+                <p>For our car example, the function is $0$ for every $x$ except the one instant
+                    at $x=5$, so we know that $\lim_{x \to a} f(x) = 0$ for all $a \neq 5$.</p>
                 <p class="math-display">$$f(x)=0 \quad \text{for all } x\neq 5, \qquad f(5)=1$$</p>
-                <p>So the road approaches the ground on both sides of $x=5$, which means</p>
+                <p>For $a=5$, we know that $f(5)=1$, but the limit only cares about values of $x$ that get arbitrarily close to $5$, not the value exactly at $5$. Since all nearby values on either side are 0, the function approaches 0 as $x \to 5$.</p>
                 <p class="math-display">$$\lim_{x \to 5} f(x)=0$$</p>
-                <p>but the actual value at that exact point is different:</p>
-                <p class="math-display">$$f(5)=1$$</p>
+
                 <p>The graph at $x=5$ looks like it has a "hole" at
-                    $(5,0)$, where the actual function value is suddenly lifted to $(5,1)$. Holes are also known as <span class="highlight">removable discontinuities</span>. </p>
+                    $(5,0)$, where the actual function value is suddenly lifted to $(5,1)$. Holes are also known as
+                    <span class="highlight">removable discontinuities</span>. </p>
                 <p class="math-display">$$\lim_{x \to a} f(x) = L\quad \neq \quad f(a)$$</p>
-                <p>In general, a <span class="highlight">removable discontinuity</span> occurs when the limit exists but is not equal to the function value at that point. The road has a
+                <p>In general, a <span class="highlight">removable discontinuity</span> occurs when the limit exists but
+                    is not equal to the function value at that point. The road has a
                     perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
                 <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value
                     at

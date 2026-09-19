@@ -34,9 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const section1 = document.getElementById('section-1');
     const section2 = document.getElementById('section-2');
     const section3 = document.getElementById('section-3');
+    const section4 = document.getElementById('section-4');
 
     section2.classList.add('hidden');
     section3.classList.add('hidden');
+    section4.classList.add('hidden');
 
     var calculator1;
     var calculator2;
@@ -251,11 +253,39 @@ function updateDesmosTheme(isDark) {
 
 
     // Question 1 Logic
+    const guessHeight4999Input = document.getElementById('guess-height-4999');
+    const submitGuess4999Btn = document.getElementById('submit-guess-4999');
+    const feedback4999 = document.getElementById('feedback-4999');
+    const guessHeight5001Input = document.getElementById('guess-height-5001');
+    const submitGuess5001Btn = document.getElementById('submit-guess-5001');
+    const feedback5001 = document.getElementById('feedback-5001');
     const guessInput = document.getElementById('guess-height');
     const submitGuessBtn = document.getElementById('submit-guess');
     const hint1Btn = document.getElementById('hint-1');
     const revealAnswer1Btn = document.getElementById('reveal-answer-1');
     const feedback1 = document.getElementById('feedback-1');
+
+    function checkNearPointGuess(input, feedback, expected, message) {
+        const guess = parseFloat(input.value);
+        if (Math.abs(guess - expected) < 0.0001) {
+            feedback.innerHTML = `<p class="correct">${message}</p>`;
+            feedback.classList.remove('incorrect');
+            feedback.classList.add('correct');
+            return true;
+        }
+        feedback.innerHTML = '<p class="incorrect">Not quite. Remember, the camera malfunctions <strong>at</strong> x = 5, but the camera still works elsewhere.</p>';
+        feedback.classList.remove('correct');
+        feedback.classList.add('incorrect');
+        return false;
+    }
+
+    submitGuess4999Btn.addEventListener('click', () => {
+        checkNearPointGuess(guessHeight4999Input, feedback4999, 0, 'Correct! At x = 4.999, the camera sees that the car is on the road, so the height is 0.');
+    });
+
+    submitGuess5001Btn.addEventListener('click', () => {
+        checkNearPointGuess(guessHeight5001Input, feedback5001, 0, 'Correct! At x = 5.001, the camera sees that the car is on the road, so the height is 0.');
+    });
 
     submitGuessBtn.addEventListener('click', () => {
         const guess = parseFloat(guessInput.value);
@@ -330,6 +360,8 @@ function updateDesmosTheme(isDark) {
     const revealAnswer3Btn = document.getElementById('reveal-answer-3');
     const feedback3 = document.getElementById('feedback-3');
     const limitReveal = document.getElementById('limit-reveal');
+    const limit5Reveal = document.getElementById('limit-5-reveal');
+    const aValueReveal = document.getElementById('a-value-reveal');
 
     function revealLimitExplanation() {
         if (limitReveal) {
@@ -340,13 +372,37 @@ function updateDesmosTheme(isDark) {
         }
     }
 
+    function revealLimit5Question() {
+        if (section4) {
+            section4.classList.remove('hidden');
+        }
+        if (limit5Reveal) {
+            limit5Reveal.classList.remove('hidden');
+            if (window.renderMathInElement) {
+                renderMathInElement(section4);
+            }
+        }
+    }
+
+    function revealAValueQuestion() {
+        if (section4) {
+            section4.classList.remove('hidden');
+        }
+        if (aValueReveal) {
+            aValueReveal.classList.remove('hidden');
+            if (window.renderMathInElement) {
+                renderMathInElement(section4);
+            }
+        }
+    }
+
     submitLimitBtn.addEventListener('click', () => {
         const guess = parseFloat(guessLimitInput.value);
         if (Math.abs(guess - 0.5) < 0.0001) {
             feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0.5 as x approaches 0. That is the limit.</p>';
             feedback3.classList.remove('incorrect');
             feedback3.classList.add('correct');
-            revealLimitExplanation();
+            revealLimit5Question();
         } else {
             feedback3.innerHTML = '<p class="incorrect">Not quite. Consider the value the function gets close to as x approaches 0 from both sides.</p>';
             feedback3.classList.remove('correct');
@@ -355,8 +411,74 @@ function updateDesmosTheme(isDark) {
     });
 
     revealAnswer3Btn.addEventListener('click', () => {
-        guessLimitInput.value = '0';
+        guessLimitInput.value = '0.5';
         submitLimitBtn.click();
+        revealLimit5Question();
+    });
+
+    const guessLimit5Input = document.getElementById('guess-limit-5');
+    const submitLimit5Btn = document.getElementById('submit-limit-5');
+    const revealAnswer5Btn = document.getElementById('reveal-answer-5');
+    const feedback5 = document.getElementById('feedback-5');
+
+    submitLimit5Btn.addEventListener('click', () => {
+        const guess = parseFloat(guessLimit5Input.value);
+        if (Math.abs(guess - 0) < 0.0001) {
+            feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because values near 5 are still on the ground before the portal jumps the car.</p>';
+            feedback5.classList.remove('incorrect');
+            feedback5.classList.add('correct');
+            revealAValueQuestion();
+        } else {
+            feedback5.innerHTML = '<p class="incorrect">Not quite. The function is still 0 for values extremely close to 5 from either side, so the limiting value is 0.</p>';
+            feedback5.classList.remove('correct');
+            feedback5.classList.add('incorrect');
+        }
+    });
+
+    revealAnswer5Btn.addEventListener('click', () => {
+        guessLimit5Input.value = '0';
+        submitLimit5Btn.click();
+        revealAValueQuestion();
+    });
+
+    const submitMultiABtn = document.getElementById('submit-multi-a');
+    const revealAnswerABtn = document.getElementById('reveal-answer-a');
+    const feedbackA = document.getElementById('feedback-a');
+    const allPossibleAValues = ['-2', '0', '3', '5', '\\pi', '42.67'];
+
+    function selectedAValues() {
+        return [...document.querySelectorAll('input[name="possible-a"]:checked')].map((input) => input.value);
+    }
+
+    function revealAllAValues() {
+        const checkboxes = document.querySelectorAll('input[name="possible-a"]');
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = true;
+        });
+        feedbackA.innerHTML = '<p class="correct">All of these values are valid choices for a, because the limit statement only asks that the function approach 0 as x gets close to a. The limit is about the nearby behavior, not whether the point itself is special.</p>';
+        feedbackA.classList.remove('incorrect');
+        feedbackA.classList.add('correct');
         revealLimitExplanation();
+    }
+
+    submitMultiABtn.addEventListener('click', () => {
+        const selected = selectedAValues();
+        const correct = allPossibleAValues.slice();
+        const isCorrect = selected.length === correct.length && correct.every((value) => selected.includes(value));
+
+        if (isCorrect) {
+            feedbackA.innerHTML = '<p class="correct">Correct! Every listed value of a could work, because the limit statement only depends on how f(x) behaves as x gets close to a.</p>';
+            feedbackA.classList.remove('incorrect');
+            feedbackA.classList.add('correct');
+            revealLimitExplanation();
+        } else {
+            feedbackA.innerHTML = '<p class="incorrect">Not quite. If the limit is 0, then the function must approach 0 as x gets close to a. Think about which values of a would make this true.</p>';
+            feedbackA.classList.remove('correct');
+            feedbackA.classList.add('incorrect');
+        }
+    });
+
+    revealAnswerABtn.addEventListener('click', () => {
+        revealAllAValues();
     });
 });

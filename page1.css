@@ -165,6 +165,43 @@ input[type="text"] {
   background-color: var(--current-button-hover-tint); 
 }
 
+.multi-select-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: left;
+    margin: 0.5rem 0;
+}
+
+.multi-select-options label {
+    display: inline-flex;
+    padding: 0.55em 0.9em;
+    border: 1px solid var(--current-border-color);
+    border-radius: 4px;
+    background-color: var(--current-section-bg);
+    color: var(--current-text-color);
+    cursor: pointer;
+}
+
+.multi-select-options input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.multi-select-options input[type="checkbox"]:checked + label {
+  background-color: var(--current-button-bg);
+  color: var(--current-button-text);
+  border-color: var(--current-button-bg);
+  filter: brightness(0.8);
+}
+
+.multi-select-options input[type="checkbox"]:not(:checked) + label:hover {
+  border-color: var(--current-button-bg);
+  background-color: var(--current-button-hover-tint);
+}
+
 .dark-theme .mc-options label:hover {
   background-color: rgba(0, 188, 212, 0.1);
 }
