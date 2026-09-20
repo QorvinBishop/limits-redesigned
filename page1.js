@@ -448,14 +448,25 @@ function updateDesmosTheme(isDark) {
     const limitReveal = document.getElementById('limit-reveal');
     const limit5Reveal = document.getElementById('limit-5-reveal');
     const aValueReveal = document.getElementById('a-value-reveal');
+    const page1Outro = document.getElementById('page1-outro');
+
+    function revealPage1Outro() {
+        if (page1Outro) {
+            page1Outro.classList.remove('hidden');
+            if (window.renderMathInElement) {
+                renderMathInElement(page1Outro);
+            }
+        }
+    }
 
     function revealLimitExplanation() {
         if (limitReveal) {
             limitReveal.classList.remove('hidden');
-            if (window.renderMathInElement) {
-                renderMathInElement(section3);
-            }
         }
+        if (window.renderMathInElement) {
+            renderMathInElement(section4);
+        }
+        revealPage1Outro();
     }
 
     function revealLimit5Question() {
@@ -567,4 +578,5 @@ function updateDesmosTheme(isDark) {
     revealAnswerABtn.addEventListener('click', () => {
         revealAllAValues();
     });
+
 });

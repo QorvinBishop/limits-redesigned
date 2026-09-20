@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuity</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="page1.css">
+    <script src="https://www.desmos.com/api/v1.12/calculator.js?apiKey=96521a4ac4da457faf78d413efb60a90"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false},
+                            {left: '\\(', right: '\\)', display: false},
+                            {left: '\\[', right: '\\]', display: true}
+                        ],
+                        throwOnError: false
+                    });"></script>
+</head>
+
+<body>
+    <div class="navbar">
+        <div>
+            <a href="page1.html">Limits</a>
+            <a href="page2.html">Continuity</a>
+        </div>
+        <button id="theme-toggle">Dark Mode</button>
+    </div>
+
+    <div class="container">
+        <h1>Continuity</h1>
+        <p class="intro-text">A graph can have a perfectly good limit and still be broken at one point. Here's how to tell the difference.</p>
+
+        <div class="lesson-section" id="continuity-section-1">
+            <h2>Continuity Detective</h2>
+            <p>Not every strange graph is broken in the same way. Sometimes the function has a hole, sometimes it jumps,
+                and sometimes it shoots off to infinity. These are all different kinds of discontinuities.</p>
+            <p>Imagine three real situations:</p>
+            <ul>
+                <li>A smooth bike path that never changes unexpectedly.</li>
+                <li>An elevator that suddenly jumps from the 2nd floor to the 7th floor.</li>
+                <li>A bridge with a missing plank that makes the path disappear for a moment.</li>
+            </ul>
+            <p>Which of these is <span class="highlight">continuous</span> all the way through?</p>
+            <div class="mc-options">
+                <input type="radio" id="case-smooth-road" name="continuity-case" value="smooth-road">
+                <label for="case-smooth-road">The smooth bike path</label><br>
+                <input type="radio" id="case-elevator" name="continuity-case" value="elevator">
+                <label for="case-elevator">The elevator jump</label><br>
+                <input type="radio" id="case-bridge" name="continuity-case" value="bridge">
+                <label for="case-bridge">The bridge with a missing plank</label>
+            </div>
+            <button id="submit-continuity-case">Submit</button>
+            <button id="reveal-answer-continuity-case" class="secondary warning">Reveal Answer</button>
+            <div id="feedback-continuity-case" class="feedback"></div>
+        </div>
+
+        <div class="lesson-section hidden" id="continuity-section-2">
+            <h2>Three Kinds of Breaks</h2>
+            <p>Here are three common "breaks" you can spot in a graph:</p>
+            <ul>
+                <li><span class="highlight">Removable discontinuity:</span> a hole—like a missing tile on the floor.</li>
+                <li><span class="highlight">Jump discontinuity:</span> the graph leaps from one height to another.</li>
+                <li><span class="highlight">Infinite discontinuity:</span> the graph shoots up or down dramatically.</li>
+            </ul>
+            <p>Think of a video game character walking across a platform. If the platform suddenly vanishes for an instant,
+                then reappears, that is a strange kind of gap.</p>
+            <div class="question">
+                <p>Which kind of break is most like a <strong>hole</strong> in the graph?</p>
+            </div>
+            <div class="mc-options">
+                <input type="radio" id="break-removable" name="break-type" value="removable">
+                <label for="break-removable">Removable discontinuity</label><br>
+                <input type="radio" id="break-jump" name="break-type" value="jump">
+                <label for="break-jump">Jump discontinuity</label><br>
+                <input type="radio" id="break-infinite" name="break-type" value="infinite">
+                <label for="break-infinite">Infinite discontinuity</label>
+            </div>
+            <button id="submit-break-type">Submit</button>
+            <button id="reveal-answer-break-type" class="secondary warning">Reveal Answer</button>
+            <div id="feedback-break-type" class="feedback"></div>
+        </div>
+
+        <div class="lesson-section hidden" id="continuity-section-3">
+            <h2>Rediscovering Continuity</h2>
+            <p>Here's the key puzzle: what must be true for a graph to feel <em>smooth and connected</em> at a point?</p>
+            <p>At $x=a$, a function is continuous if the value of the function and the nearby trend line up perfectly.</p>
+            <div class="question">
+                <p>Select all the ingredients that must be true for continuity at $x=a$.</p>
+            </div>
+            <div class="multi-select-options">
+                <input type="checkbox" id="cont-exists" name="continuity-conditions" value="exists">
+                <label for="cont-exists">$f(a)$ exists</label><br>
+                <input type="checkbox" id="cont-limit-exists" name="continuity-conditions" value="limit-exists">
+                <label for="cont-limit-exists">$\lim_{x \to a} f(x)$ exists</label><br>
+                <input type="checkbox" id="cont-equal" name="continuity-conditions" value="equal">
+                <label for="cont-equal">$\lim_{x \to a} f(x) = f(a)$</label><br>
+                <input type="checkbox" id="cont-nearby" name="continuity-conditions" value="nearby">
+                <label for="cont-nearby">The graph has a nearby shortcut</label>
+            </div>
+            <button id="submit-continuity-conditions">Submit Selection</button>
+            <button id="reveal-answer-continuity-conditions" class="secondary warning">Reveal Answer</button>
+            <div id="feedback-continuity-conditions" class="feedback"></div>
+
+            <div id="continuity-definition-reveal" class="hidden">
+                <p class="math-display">$$f \text{ is continuous at } x=a \iff \lim_{x \to a} f(x)=f(a)$$</p>
+                <p>You just rediscovered the definition of continuity.</p>
+                <p>In plain English: the graph must not "jump," "tear," or "vanish" at that point. The nearby behavior and the exact value have to agree.</p>
+                <p>That is why a hole can be a limit problem, but a true discontinuity is a continuity problem.</p>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="page2.js"></script>
+</body>
+
+</html>
