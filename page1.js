@@ -424,12 +424,12 @@ function updateDesmosTheme(isDark) {
     submitLimit5Btn.addEventListener('click', () => {
         const guess = parseFloat(guessLimit5Input.value);
         if (Math.abs(guess - 0) < 0.0001) {
-            feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because values near 5 are still on the ground before the portal jumps the car.</p>';
+            feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because at values near 4.999 (like 4.9989 and 4.9991), the car is still on the ground.</p>';
             feedback5.classList.remove('incorrect');
             feedback5.classList.add('correct');
             revealAValueQuestion();
         } else {
-            feedback5.innerHTML = '<p class="incorrect">Not quite. The function is still 0 for values extremely close to 5 from either side, so the limiting value is 0.</p>';
+            feedback5.innerHTML = '<p class="incorrect">Not quite. The function is still 0 for values extremely close to 4.999 from either side. So what is the limit at 4.999?</p>';
             feedback5.classList.remove('correct');
             feedback5.classList.add('incorrect');
         }
