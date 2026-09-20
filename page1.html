@@ -51,6 +51,7 @@
             </div>
             <input type="number" id="guess-height-4999" placeholder="Your guess in meters">
             <button id="submit-guess-4999">Submit Guess</button>
+            <button id="retry-guess-4999" class="secondary">Retry</button>
             <div id="feedback-4999" class="feedback"></div>
 
             <div class="question">
@@ -58,6 +59,7 @@
             </div>
             <input type="number" id="guess-height-5001" placeholder="Your guess in meters">
             <button id="submit-guess-5001">Submit Guess</button>
+            <button id="retry-guess-5001" class="secondary">Retry</button>
             <div id="feedback-5001" class="feedback"></div>
 
             <div class="question">
@@ -67,7 +69,7 @@
             <input type="number" id="guess-height" placeholder="Your guess in meters">
             <button id="submit-guess">Submit Guess</button>
             <button id="hint-1" class="secondary">Hint</button>
-            <button id="reveal-answer-1" class="secondary">Reveal Answer</button>
+            <button id="reveal-answer-1" class="secondary warning">Reveal Answer</button>
             <div id="feedback-1" class="feedback"></div>
         </div>
 
@@ -92,7 +94,7 @@
             </div>
             <button id="submit-mc">Submit</button>
             <button id="hint-2" class="secondary">Hint</button>
-            <button id="reveal-answer-2" class="secondary">Reveal Answer</button>
+            <button id="reveal-answer-2" class="secondary warning">Reveal Answer</button>
             <div id="feedback-2" class="feedback"></div>
         </div>
 
@@ -114,7 +116,7 @@
             </div>
             <input type="number" id="guess-limit" placeholder="Answer:">
             <button id="submit-limit">Submit Guess</button>
-            <button id="reveal-answer-3" class="secondary">Reveal Answer</button>
+            <button id="reveal-answer-3" class="secondary warning">Reveal Answer</button>
             <div id="feedback-3" class="feedback"></div>
         </div>
         <div class="lesson-section hidden" id="section-4">
@@ -130,12 +132,12 @@
                 </div>
                 <input type="number" id="guess-limit-5" placeholder="Answer:">
                 <button id="submit-limit-5">Submit</button>
-                <button id="reveal-answer-5" class="secondary">Reveal Answer</button>
+                <button id="reveal-answer-5" class="secondary warning">Reveal Answer</button>
                 <div id="feedback-5" class="feedback"></div>
             </div>
 
             <div id="a-value-reveal" class="hidden">
-                <p>Continuing with our car example, where (\(f(x) = 0\)) for all
+                <p>Continuing with our car example, where \(f(x) = 0\) for all
                     \(x \neq 5\) and $f(5) = 1$.</p>
                 <div class="question">
                     <p>Suppose $\lim_{x \to a} f(x) = 0$. Which values of $a$ could make this statement true? Select all
@@ -156,28 +158,32 @@
                     <label for="a-decimal">$a=42.67$</label>
                 </div>
                 <button id="submit-multi-a">Submit Selection</button>
-                <button id="reveal-answer-a" class="secondary">Reveal All</button>
+                <button id="reveal-answer-a" class="secondary warning">Reveal Answer</button>
                 <div id="feedback-a" class="feedback"></div>
             </div>
 
             <div id="limit-reveal" class="hidden">
 
                 <p>For our car example, the function is $0$ for every $x$ except the one instant
-                    at $x=5$, so we know that $\lim_{x \to a} f(x) = 0$ for all $a \neq 5$.</p>
-                <p class="math-display">$$f(x)=0 \quad \text{for all } x\neq 5, \qquad f(5)=1$$</p>
-                <p>For $a=5$, we know that $f(5)=1$, but the limit only cares about values of $x$ that get arbitrarily close to $5$, not the value exactly at $5$. Since all nearby values on either side are 0, the function approaches 0 as $x \to 5$.</p>
+                    at $x=5$, so we know that:</p>
+                <p class="math-display">$$\lim_{x \to a}f(x)=0 \quad \text{for all} \quad x\neq 5$$</p>
+                <p>For $a=5$, we know that $f(5)=1$, but the limit only cares about values of $f(x)$ when $x$ gets
+                    arbitrarily close to $5$, not the value exactly at $5$. Since all nearby values on either side are
+                    0, the function approaches 0 as $x \to 5$.</p>
                 <p class="math-display">$$\lim_{x \to 5} f(x)=0$$</p>
+
+                <div id="desmos-graph-2-copy" class="desmos-graph"></div>
 
                 <p>The graph at $x=5$ looks like it has a "hole" at
                     $(5,0)$, where the actual function value is suddenly lifted to $(5,1)$. Holes are also known as
-                    <span class="highlight">removable discontinuities</span>. </p>
+                    <span class="highlight">removable discontinuities</span>.
+                </p>
                 <p class="math-display">$$\lim_{x \to a} f(x) = L\quad \neq \quad f(a)$$</p>
                 <p>In general, a <span class="highlight">removable discontinuity</span> occurs when the limit exists but
                     is not equal to the function value at that point. The road has a
                     perfectly predictable trend, but a single point has been "removed" and popped up into the air!</p>
                 <p>This illustrates a key concept: a function's limit at a point can exist even if the function's value
-                    at
-                    that exact point is different or undefined.</p>
+                    at that exact point is different or undefined.</p>
             </div>
 
 

@@ -51,6 +51,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
+    padding-top: 72px;
     background-color: var(--current-bg-color);
     color: var(--current-text-color);
     transition: background-color 0.3s, color 0.3s;
@@ -229,6 +230,18 @@ button.secondary {
 
 button.secondary:hover {
     background-color: rgba(0, 188, 212, 0.1);
+}
+
+button.warning,
+button.warning:hover,
+button.warning:focus {
+    background-color: #c62828;
+    border-color: #b71c1c;
+    color: #ffffff;
+}
+
+button.warning:hover {
+    background-color: #9f1f1f;
 }
 
 .feedback {

@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initDesmosGraph(); // Initialize Desmos on load
     initDesmosGraph2(); // Initialize the second graph on load so it appears when section 2 is revealed
+    initDesmosGraph2Copy(); // Duplicate the portal graph for the later discontinuity explanation
     initDesmosGraph3(); // Initialize the third graph for the limit discussion
 
     // Initialize Desmos theme based on loaded theme
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var calculator1;
     var calculator2;
+    var calculator2Copy;
     var calculator3;
 
     function initDesmosGraph() {
@@ -117,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let currentCarX = 2;
         calculator1.setExpression({ id: 'a', latex: `a=${currentCarX}` });
-        var newDefaultState = calculator1.getState();
+        const newDefaultState = calculator1.getState();
         calculator1.setDefaultState(newDefaultState);
 }
 
@@ -127,6 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Second Desmos graph element not found!");
             return;
         }
+
+        const isDark = body.classList.contains('dark-theme');
 
         calculator2 = Desmos.GraphingCalculator(elt2, {
             keypad: false,
@@ -138,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showXAxis: true,
             showYAxis: true,
             showGrid: false,
-            backgroundColor: '#263238',
+            backgroundColor: isDark ? '#263238' : '#e0f7fa',
             trace: false,
             pointsOfInterest: true,
         });
@@ -179,8 +183,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentCarX = 2;
         calculator2.setExpression({ id: 'a_2', latex: `a=${currentCarX}` });
-        var newDefaultState = calculator2.getState();
+        const newDefaultState = calculator2.getState();
         calculator2.setDefaultState(newDefaultState);
+    }
+
+    function initDesmosGraph2Copy() {
+        const elt2Copy = document.getElementById('desmos-graph-2-copy');
+        if (!elt2Copy) {
+            console.error("Portal graph copy element not found!");
+            return;
+        }
+
+        const isDark = body.classList.contains('dark-theme');
+
+        calculator2Copy = Desmos.GraphingCalculator(elt2Copy, {
+            keypad: false,
+            expressions: false,
+            settingsMenu: false,
+            zoomButtons: true,
+            lockViewport: false,
+            showResetButtonOnGraphpaper: true,
+            showXAxis: true,
+            showYAxis: true,
+            showGrid: false,
+            backgroundColor: isDark ? '#263238' : '#e0f7fa',
+            trace: false,
+            pointsOfInterest: true,
+        });
+
+        calculator2Copy.setExpression({
+            id: 'road-2-copy',
+            latex: 'f(x)=\\left\\{x=5:1,\\ 0\\right\\}',
+            color: Desmos.Colors.BLUE,
+            lineWidth: 5
+        });
+
+        calculator2Copy.setExpression({
+            id: 'portal_point_2_copy',
+            latex: '(5,1)',
+            color: Desmos.Colors.BLUE,
+            pointSize: 15,
+        });
+
+        calculator2Copy.setExpression({
+            id: 'hole_discontinuity_2_copy',
+            latex: '(5,0)',
+            color: Desmos.Colors.BLUE,
+            pointStyle: Desmos.Styles.OPEN,
+            pointSize: 15,
+        });
+
+        calculator2Copy.setExpression({
+            id: 'car_tracer_2_copy',
+            latex: '\\left(a,0.2 * \\operatorname{round}\\left(f\\left(a\\right) / 0.2\\right)\\right)',
+            color: Desmos.Colors.RED,
+            pointStyle: 'POINT'
+        });
+
+        calculator2Copy.setMathBounds({
+            left: 0, right: 10, bottom: -1.5, top: 1.5
+        });
+
+        calculator2Copy.setExpression({ id: 'a_2_copy', latex: 'a=2' });
+        const copyDefaultState = calculator2Copy.getState();
+        calculator2Copy.setDefaultState(copyDefaultState);
     }
 
     function initDesmosGraph3() {
@@ -220,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         calculator3.setMathBounds(defaultBounds);
-        var newDefaultState = calculator3.getState();
+        const newDefaultState = calculator3.getState();
         calculator3.setDefaultState(newDefaultState);
     }
 
@@ -243,6 +309,12 @@ function updateDesmosTheme(isDark) {
         backgroundColor: isDark ? '#263238' : '#e0f7fa',
         textColor: isDark ? '#e0f7fa' : '#263238'
     });
+    if (calculator2Copy) {
+        calculator2Copy.setOptions({
+            backgroundColor: isDark ? '#263238' : '#e0f7fa',
+            textColor: isDark ? '#e0f7fa' : '#263238'
+        });
+    }
     if (calculator3) {
         calculator3.setOptions({
             backgroundColor: isDark ? '#263238' : '#e0f7fa',
@@ -255,9 +327,11 @@ function updateDesmosTheme(isDark) {
     // Question 1 Logic
     const guessHeight4999Input = document.getElementById('guess-height-4999');
     const submitGuess4999Btn = document.getElementById('submit-guess-4999');
+    const retryGuess4999Btn = document.getElementById('retry-guess-4999');
     const feedback4999 = document.getElementById('feedback-4999');
     const guessHeight5001Input = document.getElementById('guess-height-5001');
     const submitGuess5001Btn = document.getElementById('submit-guess-5001');
+    const retryGuess5001Btn = document.getElementById('retry-guess-5001');
     const feedback5001 = document.getElementById('feedback-5001');
     const guessInput = document.getElementById('guess-height');
     const submitGuessBtn = document.getElementById('submit-guess');
@@ -283,8 +357,20 @@ function updateDesmosTheme(isDark) {
         checkNearPointGuess(guessHeight4999Input, feedback4999, 0, 'Correct! At x = 4.999, the camera sees that the car is on the road, so the height is 0.');
     });
 
+    retryGuess4999Btn.addEventListener('click', () => {
+        guessHeight4999Input.value = '';
+        feedback4999.innerHTML = '';
+        feedback4999.classList.remove('correct', 'incorrect');
+    });
+
     submitGuess5001Btn.addEventListener('click', () => {
         checkNearPointGuess(guessHeight5001Input, feedback5001, 0, 'Correct! At x = 5.001, the camera sees that the car is on the road, so the height is 0.');
+    });
+
+    retryGuess5001Btn.addEventListener('click', () => {
+        guessHeight5001Input.value = '';
+        feedback5001.innerHTML = '';
+        feedback5001.classList.remove('correct', 'incorrect');
     });
 
     submitGuessBtn.addEventListener('click', () => {
@@ -455,7 +541,7 @@ function updateDesmosTheme(isDark) {
         checkboxes.forEach((checkbox) => {
             checkbox.checked = true;
         });
-        feedbackA.innerHTML = '<p class="correct">All of these values are valid choices for a, because the limit statement only asks that the function approach 0 as x gets close to a. The limit is about the nearby behavior, not whether the point itself is special.</p>';
+        feedbackA.innerHTML = '<p class="correct">All of these values are valid choices for a, because the limit statement only asks that the function approaches 0 as x gets close to a. The limit is about the nearby behavior, not the point itself.</p>';
         feedbackA.classList.remove('incorrect');
         feedbackA.classList.add('correct');
         revealLimitExplanation();
@@ -472,7 +558,7 @@ function updateDesmosTheme(isDark) {
             feedbackA.classList.add('correct');
             revealLimitExplanation();
         } else {
-            feedbackA.innerHTML = '<p class="incorrect">Not quite. If the limit is 0, then the function must approach 0 as x gets close to a. Think about which values of a would make this true.</p>';
+            feedbackA.innerHTML = '<p class="incorrect">Not quite. If the limit is 0, then the function must <strong>approach 0</strong> as x gets close to a. Think about which values of a would make this true.</p>';
             feedbackA.classList.remove('correct');
             feedbackA.classList.add('incorrect');
         }
