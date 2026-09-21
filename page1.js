@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.textContent = isDark ? 'Light Mode' : 'Dark Mode';
     }
 
+    function refreshVisibleCalculator(calculator) {
+        if (!calculator) return;
+        calculator.resize();
+        requestAnimationFrame(() => calculator.resize());
+    }
+
     // Theme toggle functionality
     themeToggle.addEventListener('click', () => {
         body.classList.toggle('dark-theme');
@@ -14,6 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         updateThemeToggleLabel();
         updateDesmosTheme(isDark);
+
+        // Force recalculation for all graphs on theme switch
+        refreshVisibleCalculator(calculator1);
+        refreshVisibleCalculator(calculator2);
+        refreshVisibleCalculator(calculator2Copy);
+        refreshVisibleCalculator(calculator3);
     });
 
     // Load saved theme
@@ -114,7 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'car_tracer',
             latex: '(a,f(a))',
             color: Desmos.Colors.RED,
-            pointStyle: 'POINT'
+            pointStyle: 'POINT',
+            dragMode: Desmos.DragModes.NONE,
+            pointSize: 23,
+            pointOpacity: 0.9
         });
 
         
@@ -140,8 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
             keypad: false,
             expressions: false,
             settingsMenu: false,
-            zoomButtons: false,
-            lockViewport: true,
+            zoomButtons: true,
+            lockViewport: false,
             showResetButtonOnGraphpaper: true,
             showXAxis: true,
             showYAxis: true,
@@ -151,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pointsOfInterest: true,
         });
 
+        // Define the piecewise function
         calculator2.setExpression({ 
             id: 'road-2', 
             latex: 'f(x)=\\left\\{x=5:1,\\ 0\\right\\}', 
@@ -158,13 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
             lineWidth: 5
         });
 
+        // Portal point at (5,1)
         calculator2.setExpression({
             id: 'portal_point_2',
             latex: '(5,1)',
             color: Desmos.Colors.BLUE,
             pointSize: 15,
         });
-
+        
+        // Hole discontinuity at (5,0)
         calculator2.setExpression({
             id: 'hole_discontinuity_2',
             latex: '(5,0)',
@@ -173,20 +191,60 @@ document.addEventListener('DOMContentLoaded', () => {
             pointSize: 15,
         });
 
-        calculator2.setExpression({
-            id: 'car_tracer_2',
-            latex: '\\left(a,0.2 * \\operatorname{round}\\left(f\\left(a\\right) / 0.2\\right)\\right)',
-            color: Desmos.Colors.RED,
-            pointStyle: 'POINT'
-        });
+        // 1. Draggable On-Graph Slider Point
+  // Restricts y to -0.5 (or any track line height you prefer) and limits x between 0 and 10
+  calculator2.setExpression({
+    id: 'slider_handle_x',
+    latex: 'c = 2',
+    sliderBounds: { min: 1, max: 9 }
+  });
+
+  calculator2.setExpression({
+    id: 'slider_handle_point',
+    latex: '\\left(c,-0.5\\right)',
+    color: Desmos.Colors.BLACK,
+    pointSize: 12,
+    dragMode: Desmos.DragModes.X // Restricts dragging strictly to the horizontal X axis
+  });
+
+  // Optional: Visual track line for the slider handle
+  calculator2.setExpression({
+    id: 'slider_track',
+    latex: 'y = -0.5 \\left\\{1 \\le x \\le 9\\right\\}',
+    color: Desmos.Colors.BLACK,
+    lineStyle: Desmos.Styles.DASHED,
+    lineWidth: 2
+  });
+  calculator2.setExpression({
+    id: 'slider_track_edges',
+    latex: 'x=5+\\left[-4,4\\right]\\left\\{-0.6\\le y\\le-0.4\\right\\}',
+    color: Desmos.Colors.BLACK,
+    lineStyle: Desmos.Styles.SOLID,
+    lineWidth: 2
+  });
+  // 2. Define the snapping logic variable 'a'
+  // If the slider x is within 0.2 of 5, snap 'a' to 5; otherwise, evaluate to x_slider
+  calculator2.setExpression({
+    id: 'snap_logic',
+    latex: 'a=\\left\\{\\left|c-5\\right|<0.2:5,c\\right\\}',
+  });
+
+  // 3. Updated Car Tracer
+  // Evaluates using the snapping variable 'a'
+  calculator2.setExpression({
+    id: 'car_tracer_2',
+    latex: '(a,f(a))',
+    color: Desmos.Colors.RED,
+    pointStyle: 'POINT',
+    pointSize: 23,
+    pointOpacity: 0.9
+  });
 
 
         calculator2.setMathBounds({
             left: 0, right: 10, bottom: -1.5, top: 1.5
         });
 
-        let currentCarX = 2;
-        calculator2.setExpression({ id: 'a_2', latex: `a=${currentCarX}` });
         const newDefaultState = calculator2.getState();
         calculator2.setDefaultState(newDefaultState);
     }
@@ -204,12 +262,12 @@ document.addEventListener('DOMContentLoaded', () => {
             keypad: false,
             expressions: false,
             settingsMenu: false,
-            zoomButtons: true,
-            lockViewport: false,
-            showResetButtonOnGraphpaper: true,
+            zoomButtons: false,
+            lockViewport: true,
+            showResetButtonOnGraphpaper: false,
             showXAxis: true,
             showYAxis: true,
-            showGrid: false,
+            showGrid: true,
             backgroundColor: isDark ? '#263238' : '#e0f7fa',
             trace: false,
             pointsOfInterest: true,
@@ -237,18 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
             pointSize: 15,
         });
 
-        calculator2Copy.setExpression({
-            id: 'car_tracer_2_copy',
-            latex: '\\left(a,0.2 * \\operatorname{round}\\left(f\\left(a\\right) / 0.2\\right)\\right)',
-            color: Desmos.Colors.RED,
-            pointStyle: 'POINT'
-        });
-
         calculator2Copy.setMathBounds({
             left: 0, right: 10, bottom: -1.5, top: 1.5
         });
-
-        calculator2Copy.setExpression({ id: 'a_2_copy', latex: 'a=2' });
         const copyDefaultState = calculator2Copy.getState();
         calculator2Copy.setDefaultState(copyDefaultState);
     }
@@ -385,12 +434,12 @@ function updateDesmosTheme(isDark) {
             feedback1.classList.add('correct');
             // Reveal section 2
             section2.classList.remove('hidden');
-            if (calculator2) { calculator2.resize(); }
+            refreshVisibleCalculator(calculator2);
             if (window.renderMathInElement) {
                 renderMathInElement(section2);
             }
         } else {
-            feedback1.innerHTML = '<p class="incorrect">Not quite. Remember, the camera malfunctions <strong>at</strong> x = 5, but what do you <strong>expect</strong> the car to be at x = 5 based on its known path?</p>';
+            feedback1.innerHTML = '<p class="incorrect">Not quite. Remember, the camera malfunctions <strong>at</strong> x = 5, but based on the car\'s known path, what do you <strong>expect</strong> the car\'s height to be at x = 5 ?</p>';
             feedback1.classList.remove('correct');
             feedback1.classList.add('incorrect');
         }
@@ -422,7 +471,7 @@ function updateDesmosTheme(isDark) {
             // Reveal section 3
             section3.classList.remove('hidden');
 
-            if (calculator3) { calculator3.resize(); }
+            refreshVisibleCalculator(calculator3);
 
             if (window.renderMathInElement) {
                 renderMathInElement(section3);
@@ -466,6 +515,7 @@ function updateDesmosTheme(isDark) {
     function revealLimitExplanation() {
         if (limitReveal) {
             limitReveal.classList.remove('hidden');
+            refreshVisibleCalculator(calculator2Copy);
         }
         if (window.renderMathInElement) {
             renderMathInElement(section4);
@@ -489,8 +539,10 @@ function updateDesmosTheme(isDark) {
         if (section4) {
             section4.classList.remove('hidden');
         }
+        
         if (aValueReveal) {
             aValueReveal.classList.remove('hidden');
+            refreshVisibleCalculator(calculator2Copy);
             if (window.renderMathInElement) {
                 renderMathInElement(section4);
             }
