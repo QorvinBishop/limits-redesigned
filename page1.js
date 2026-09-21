@@ -100,11 +100,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         calculator1.setExpression({ 
             id: 'road', 
-            latex: 'f\\left(x\\right)=\\left\\{x=5:10,0\\right\\}', 
+            latex: "f\\left(x\\right)=\\left\\{\\left|x-5\\right|<0.2:10,0\\right\\}", 
             color: Desmos.Colors.BLUE ,
             lineWidth: 5
         });
-
+        calculator1.setExpression({
+            id: 'slider-a',
+            latex: 'a = 2',
+            sliderBounds: { min: 0, max: 10, },
+            playing: true,
+        });
         calculator1.setExpression({
             id: 'car_tracer',
             latex: '(a,f(a))',
@@ -118,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         let currentCarX = 2;
-        calculator1.setExpression({ id: 'a', latex: `a=${currentCarX}` });
         const newDefaultState = calculator1.getState();
         calculator1.setDefaultState(newDefaultState);
 }
