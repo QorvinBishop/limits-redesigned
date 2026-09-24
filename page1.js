@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
+    const glitchToggle = document.getElementById('glitch-toggle');
+    const motionToggle = document.getElementById('motion-toggle');
     const body = document.body;
 
     function updateThemeToggleLabel() {
@@ -58,69 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
     var calculator2Copy;
     var calculator3;
 
-    function initDesmosGraph() {
-        const elt1 = document.getElementById('desmos-graph-1');
-        if (!elt1) {
-            console.error("Desmos graph element not found!");
-            return;
-        }
-        console.log("Desmos element found:", elt1);
-        calculator1 = Desmos.GraphingCalculator(elt1, {
-            keypad: false,
-            expressions: false,
-            settingsMenu: false,
-            zoomButtons: false,
-            lockViewport: true,
-            showResetButtonOnGraphpaper: true,
-            showXAxis: true,
-            showYAxis: false,
-            showGrid: false,
-            backgroundColor: '#263238', // Dark background for the graph
-            pointsOfInterest: false,
-            trace: false,
-        });
-        console.log("calculator1 assigned:", calculator1);
+    function updateGraph1SliderMotion() {
+        if (!calculator1) return;
 
-
-        // Function for the road (y=0 with a hole at x=5, point at (5,1))
-        calculator1.setExpression({
-            id: 'time',
-            latex: 't = 0',
-            playing: true,
-            loopMode: 'LOOP_FORWARD',
-            sliderSpeedMultiplier: 0.1
-        });
-        
-        calculator1.controller.dispatch({
-            type: 'set-slider-animationperiod', 
-            id: 'time', 
-            animationPeriod: 20 // 20ms = 0.02x speed
-        });
-        // Create the flat line that glitches out at x = 5
-        
-        calculator1.setExpression({
-            id: 'glitched-flatline1',
-            latex: 'y = \\frac{(0.1t + 1) \\cdot \\sin(80(x - 0.1) - 0.1t)}{1 + 300(x-5)^2}',
-            color: '#38ffda', // Gives it a clean digital cyan look 38ffda
-        });
-        calculator1.setExpression({
-            id: 'glitched-flatline2',
-            latex: 'y = \\frac{(0.01t + 1) \\cdot \\sin(80x - 0.1t)}{1 + 300(x-5)^2}',
-            color: '#FF00FF', // Gives it a clean digital magenta look FF00FF
-            lineOpacity: 0.6
-        });
-        
-        calculator1.setExpression({ 
-            id: 'road', 
-            latex: "f\\left(x\\right)=\\left\\{\\left|x-5\\right|<0.2:10,0\\right\\}", 
-            color: Desmos.Colors.BLUE ,
-            lineWidth: 5
-        });
+        const moving = motionToggle ? motionToggle.checked : true;
         calculator1.setExpression({
             id: 'slider-a',
             latex: 'a = 2',
-            sliderBounds: { min: 0, max: 10, },
-            playing: true,
+            sliderBounds: { min: 0, max: 10 },
+            playing: moving,
         });
         calculator1.setExpression({
             id: 'car_tracer',
@@ -132,15 +80,198 @@ document.addEventListener('DOMContentLoaded', () => {
             pointOpacity: 0.9
         });
 
-        
+        const state = calculator1.getState();
+        calculator1.setDefaultState(state);
+    }
+
+    function restoreGraph1MotionDefaults() {
+        if (!calculator1) return;
+
+        const moving = motionToggle ? motionToggle.checked : true;
+        calculator1.setExpression({
+            id: 'time',
+            latex: 't = 0',
+            playing: true,
+            loopMode: 'LOOP_FORWARD'
+        });
+        calculator1.controller.dispatch({
+            type: 'set-slider-animationperiod',
+            id: 'time',
+            animationPeriod: 1000
+        });
+        calculator1.setExpression({
+            id: 'slider-a',
+            latex: 'a = 2',
+            sliderBounds: { min: 0, max: 10 },
+            playing: moving,
+        });
+        calculator1.setExpression({
+            id: 'car_tracer',
+            latex: '(a,f(a))',
+            color: Desmos.Colors.RED,
+            pointStyle: 'POINT',
+            dragMode: Desmos.DragModes.NONE,
+            pointSize: 23,
+            pointOpacity: 0.9
+        });
+
+        const defaultState = calculator1.getState();
+        calculator1.setDefaultState(defaultState);
+        if (moving) {
+            calculator1.setExpression({
+                id: 'slider-a',
+                latex: 'a = 2',
+                sliderBounds: { min: 0, max: 10 },
+                playing: true,
+            });
+        }
+    }
+
+    function initDesmosGraph() {
+        const enabled = glitchToggle ? glitchToggle.checked : true;
+        const elt1 = document.getElementById('desmos-graph-1');
+        if (!elt1) {
+            console.error("Desmos graph element not found!");
+            return;
+        }
+
+        if (calculator1) {
+            calculator1.destroy();
+            calculator1 = null;
+        }
+
+        const isDark = body.classList.contains('dark-theme');
+
+        calculator1 = Desmos.GraphingCalculator(elt1, {
+            keypad: false,
+            expressions: false,
+            settingsMenu: false,
+            zoomButtons: false,
+            lockViewport: true,
+            showResetButtonOnGraphpaper: true,
+            showXAxis: true,
+            showYAxis: false,
+            showGrid: false,
+            backgroundColor: isDark ? '#263238' : '#e0f7fa',
+            pointsOfInterest: false,
+            trace: false,
+        });
+
+        const resetButton = elt1.querySelector('.dcg-btn-reset');
+        if (resetButton) {
+            resetButton.addEventListener('click', () => {
+                setTimeout(() => {
+                    restoreGraph1MotionDefaults();
+                }, 0);
+            }, { once: true });
+        }
+
+        calculator1.setExpression({
+            id: 'time',
+            latex: 't = 0',
+            playing: true,
+            loopMode: 'LOOP_FORWARD'
+        });
+        calculator1.controller.dispatch({
+            type: 'set-slider-animationperiod',
+            id: 'time',
+            animationPeriod: 1000
+        });
+
+        if (enabled) {
+            calculator1.setExpression({
+                id: 'glitched-flatline1',
+                latex: 'y = \\frac{(0.1t + 1) \\cdot \\sin(80(x - 0.1) - 0.1t)}{1 + 300(x-5)^2}',
+                color: '#38ffda',
+            });
+            calculator1.setExpression({
+                id: 'glitched-flatline2',
+                latex: 'y = \\frac{(0.01t + 1) \\cdot \\sin(80x - 0.1t)}{1 + 300(x-5)^2}',
+                color: '#FF00FF',
+                lineOpacity: 0.6
+            });            
+        } else {  
+            calculator1.setExpression({
+                id: 'hole-discontinuity',
+                latex: '(5,0)',
+                color: Desmos.Colors.BLUE,
+                pointStyle: Desmos.Styles.OPEN,
+                pointSize: 15
+            });
+        }
+        calculator1.setExpression({ 
+            id: 'road', 
+            latex: enabled ? "f\\left(x\\right)=\\left\\{\\left|x-5\\right|<0.2:10,0\\right\\}" : "f\\left(x\\right)=\\left\\{\\left|x-5\\right|<0.09:10,0\\right\\}", 
+            color: Desmos.Colors.BLUE,
+            lineWidth: 5
+        });
+        calculator1.setExpression({
+            id: 'slider-a',
+            latex: 'a = 2',
+            sliderBounds: { min: 0, max: 10 },
+            playing: motionToggle ? motionToggle.checked : true,
+        });
+        calculator1.setExpression({
+            id: 'car_tracer',
+            latex: '(a,f(a))',
+            color: Desmos.Colors.RED,
+            pointStyle: 'POINT',
+            dragMode: Desmos.DragModes.NONE,
+            pointSize: 23,
+            pointOpacity: 0.9
+        });
+
         calculator1.setMathBounds({
             left: 0, right: 10, bottom: -2, top: 2
         });
-        
-        let currentCarX = 2;
+
         const newDefaultState = calculator1.getState();
         calculator1.setDefaultState(newDefaultState);
-}
+    }
+
+    if (glitchToggle) {
+        glitchToggle.addEventListener('change', () => {
+            initDesmosGraph();
+            updateDesmosTheme(body.classList.contains('dark-theme'));
+        });
+    }
+
+    if (motionToggle) {
+        motionToggle.addEventListener('change', () => {
+            updateGraph1SliderMotion();
+            refreshVisibleCalculator(calculator1);
+        });
+    }
+
+    function updateCalculator2SliderColors(isDark) {
+        if (!calculator2) return;
+
+        const trackColor = isDark ? '#ffffff' : Desmos.Colors.BLACK;
+
+        calculator2.setExpression({
+            id: 'slider_handle_point',
+            latex: '\\left(c,-0.5\\right)',
+            color: trackColor,
+            pointSize: 12,
+            dragMode: Desmos.DragModes.X
+        });
+
+        calculator2.setExpression({
+            id: 'slider_track',
+            latex: 'y = -0.5 \\left\\{1 \\le x \\le 9\\right\\}',
+            color: trackColor,
+            lineStyle: Desmos.Styles.DASHED,
+            lineWidth: 2
+        });
+
+        calculator2.setExpression({
+            id: 'slider_track_edges',
+            latex: 'x=5+\\left[-4,4\\right]\\left\\{-0.6\\le y\\le-0.4\\right\\}',
+            color: trackColor,
+            lineStyle: Desmos.Styles.SOLID,
+            lineWidth: 2
+        });
+    }
 
     function initDesmosGraph2() {
         const elt2 = document.getElementById('desmos-graph-2');
@@ -155,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
             keypad: false,
             expressions: false,
             settingsMenu: false,
-            zoomButtons: true,
+            zoomButtons: false,
             lockViewport: false,
             showResetButtonOnGraphpaper: true,
             showXAxis: true,
@@ -202,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
   calculator2.setExpression({
     id: 'slider_handle_point',
     latex: '\\left(c,-0.5\\right)',
-    color: Desmos.Colors.BLACK,
+    color: isDark ? '#ffffff' : Desmos.Colors.BLACK,
     pointSize: 12,
     dragMode: Desmos.DragModes.X // Restricts dragging strictly to the horizontal X axis
   });
@@ -211,14 +342,14 @@ document.addEventListener('DOMContentLoaded', () => {
   calculator2.setExpression({
     id: 'slider_track',
     latex: 'y = -0.5 \\left\\{1 \\le x \\le 9\\right\\}',
-    color: Desmos.Colors.BLACK,
+    color: isDark ? '#ffffff' : Desmos.Colors.BLACK,
     lineStyle: Desmos.Styles.DASHED,
     lineWidth: 2
   });
   calculator2.setExpression({
     id: 'slider_track_edges',
     latex: 'x=5+\\left[-4,4\\right]\\left\\{-0.6\\le y\\le-0.4\\right\\}',
-    color: Desmos.Colors.BLACK,
+    color: isDark ? '#ffffff' : Desmos.Colors.BLACK,
     lineStyle: Desmos.Styles.SOLID,
     lineWidth: 2
   });
@@ -358,10 +489,13 @@ function updateDesmosTheme(isDark) {
         backgroundColor: isDark ? '#263238' : '#e0f7fa',
         textColor: isDark ? '#e0f7fa' : '#263238'
     });
-    calculator2.setOptions({
-        backgroundColor: isDark ? '#263238' : '#e0f7fa',
-        textColor: isDark ? '#e0f7fa' : '#263238'
-    });
+    if (calculator2) {
+        calculator2.setOptions({
+            backgroundColor: isDark ? '#263238' : '#e0f7fa',
+            textColor: isDark ? '#e0f7fa' : '#263238'
+        });
+        updateCalculator2SliderColors(isDark);
+    }
     if (calculator2Copy) {
         calculator2Copy.setOptions({
             backgroundColor: isDark ? '#263238' : '#e0f7fa',
