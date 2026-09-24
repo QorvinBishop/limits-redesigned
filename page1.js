@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             expressions: false,
             settingsMenu: false,
             zoomButtons: false,
-            lockViewport: false,
+            lockViewport: true,
             showResetButtonOnGraphpaper: true,
             showXAxis: true,
             showYAxis: true,

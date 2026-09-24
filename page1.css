@@ -267,12 +267,21 @@ input[type="text"] {
 }
 
 .dark-theme .mc-options label .katex,
-.dark-theme .mc-options input[type="radio"]:checked + label .katex,
-.dark-theme .multi-select-options label .katex,
-.dark-theme .multi-select-options input[type="checkbox"]:checked + label .katex,
 .dark-theme .mc-options label:hover .katex,
-.dark-theme .multi-select-options label:hover .katex {
-  color: var(--current-text-color);
+.dark-theme .multi-select-options label .katex,
+.dark-theme .multi-select-options label:hover .katex,
+.dark-theme .multi-select-options label .katex *,
+.dark-theme .mc-options label .katex * {
+  color: var(--current-text-color) !important;
+}
+
+.dark-theme .mc-options input[type="radio"]:checked + label,
+.dark-theme .mc-options input[type="radio"]:checked + label .katex,
+.dark-theme .mc-options input[type="radio"]:checked + label .katex *,
+.dark-theme .multi-select-options input[type="checkbox"]:checked + label,
+.dark-theme .multi-select-options input[type="checkbox"]:checked + label .katex,
+.dark-theme .multi-select-options input[type="checkbox"]:checked + label .katex * {
+  color: var(--current-button-text) !important;
 }
 
 .dark-theme .mc-options label:hover {
