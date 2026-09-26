@@ -511,6 +511,22 @@ function updateDesmosTheme(isDark) {
 }
 
 
+    const question1ScrollOffset = 80;
+    const question2ScrollOffset = 80;
+    const question3ScrollOffset = 80;
+    const question4ScrollOffset = 80;
+    const question5ScrollOffset = 30;
+
+    function smoothScrollToTarget(target, offset = 80) {
+        if (!target) return;
+        const rect = target.getBoundingClientRect();
+        const targetTop = rect.top + window.scrollY - offset;
+        window.scrollTo({
+            top: targetTop,
+            behavior: 'smooth'
+        });
+    }
+
     // Question 1 Logic
     const guessHeight4999Input = document.getElementById('guess-height-4999');
     const submitGuess4999Btn = document.getElementById('submit-guess-4999');
@@ -525,6 +541,7 @@ function updateDesmosTheme(isDark) {
     const hint1Btn = document.getElementById('hint-1');
     const revealAnswer1Btn = document.getElementById('reveal-answer-1');
     const feedback1 = document.getElementById('feedback-1');
+    const next1Btn = document.getElementById('next-1');
 
     function checkNearPointGuess(input, feedback, expected, message) {
         const guess = parseFloat(input.value);
@@ -560,33 +577,62 @@ function updateDesmosTheme(isDark) {
         feedback5001.classList.remove('correct', 'incorrect');
     });
 
+    function showNextButton(button, onNext) {
+        if (!button) return;
+        button.classList.remove('hidden');
+        button.onclick = onNext;
+    }
+
     submitGuessBtn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#guess-height').closest('.question');
         const guess = parseFloat(guessInput.value);
         if (guess === 0) {
             feedback1.innerHTML = "<p class=\"correct\">You made a reasonable guess! Based on the surrounding path, 0 meters is exactly what we'd expect. However, some mischievous guy named <strong>Waniel</strong> placed a portal there!</p>";
             feedback1.classList.remove('incorrect');
             feedback1.classList.add('correct');
-            // Reveal section 2
+            showNextButton(next1Btn, () => {
+                section2.classList.remove('hidden');
+                refreshVisibleCalculator(calculator2);
+                if (window.renderMathInElement) {
+                    renderMathInElement(section2);
+                }
+                smoothScrollToTarget(section2, question2ScrollOffset);
+                next1Btn.classList.add('hidden');
+            });
+            smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
+        } else {
+            feedback1.innerHTML = '<p class="incorrect">Not quite. Remember, the camera malfunctions <strong>at</strong> x = 5, but based on the car\'s known path, what do you <strong>expect</strong> the car\'s height to be at x = 5 ?</p>';
+            feedback1.classList.remove('correct');
+            feedback1.classList.add('incorrect');
+            if (next1Btn) next1Btn.classList.add('hidden');
+            smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
+        }
+    });
+
+    hint1Btn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#guess-height').closest('.question');
+        feedback1.innerHTML = '<p class="feedback">Think about the car\'s height just before and just after x = 5. What height does it <strong>approach</strong>?</p>';
+        feedback1.classList.remove('correct', 'incorrect');
+        if (next1Btn) next1Btn.classList.add('hidden');
+        smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
+    });
+
+    revealAnswer1Btn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#guess-height').closest('.question');
+        guessInput.value = '0';
+        feedback1.innerHTML = "<p class=\"correct\">You made a reasonable guess! Based on the surrounding path, 0 meters is exactly what we'd expect. However, some mischievous guy named <strong>Waniel</strong> placed a portal there!</p>";
+        feedback1.classList.remove('incorrect');
+        feedback1.classList.add('correct');
+        showNextButton(next1Btn, () => {
             section2.classList.remove('hidden');
             refreshVisibleCalculator(calculator2);
             if (window.renderMathInElement) {
                 renderMathInElement(section2);
             }
-        } else {
-            feedback1.innerHTML = '<p class="incorrect">Not quite. Remember, the camera malfunctions <strong>at</strong> x = 5, but based on the car\'s known path, what do you <strong>expect</strong> the car\'s height to be at x = 5 ?</p>';
-            feedback1.classList.remove('correct');
-            feedback1.classList.add('incorrect');
-        }
-    });
-
-    hint1Btn.addEventListener('click', () => {
-        feedback1.innerHTML = '<p class="feedback">Think about the car\'s height just before and just after x = 5. What height does it <strong>approach</strong>?</p>';
-        feedback1.classList.remove('correct', 'incorrect');
-    });
-
-    revealAnswer1Btn.addEventListener('click', () => {
-        guessInput.value = '0';
-        submitGuessBtn.click(); // Simulate clicking submit to show feedback and reveal next section
+            smoothScrollToTarget(section2, question2ScrollOffset);
+            next1Btn.classList.add('hidden');
+        });
+        smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
     });
 
 
@@ -595,36 +641,57 @@ function updateDesmosTheme(isDark) {
     const hint2Btn = document.getElementById('hint-2');
     const revealAnswer2Btn = document.getElementById('reveal-answer-2');
     const feedback2 = document.getElementById('feedback-2');
+    const next2Btn = document.getElementById('next-2');
 
     submitMcBtn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#section-2 .question') || feedback2;
         const selectedOption = document.querySelector('input[name="prediction-match"]:checked');
         if (selectedOption && selectedOption.value === 'false') {
             feedback2.innerHTML = '<p class="correct">Correct! Your prediction (the limit) was 0, but the actual height at x = 5 was 1 meter. They are not the same!</p>';
             feedback2.classList.remove('incorrect');
             feedback2.classList.add('correct');
-            // Reveal section 3
-            section3.classList.remove('hidden');
-
-            refreshVisibleCalculator(calculator3);
-
-            if (window.renderMathInElement) {
-                renderMathInElement(section3);
-            }
+            showNextButton(next2Btn, () => {
+                section3.classList.remove('hidden');
+                refreshVisibleCalculator(calculator3);
+                if (window.renderMathInElement) {
+                    renderMathInElement(section3);
+                }
+                smoothScrollToTarget(section3, question3ScrollOffset);
+                next2Btn.classList.add('hidden');
+            });
+            smoothScrollToTarget(questionBlock || feedback2, question2ScrollOffset);
         } else {
             feedback2.innerHTML = '<p class="incorrect">Not quite. Think about what your prediction was for the car\'s height at x = 5, versus what actually happened due to the portal.</p>';
             feedback2.classList.remove('correct');
             feedback2.classList.add('incorrect');
+            if (next2Btn) next2Btn.classList.add('hidden');
+            smoothScrollToTarget(questionBlock || feedback2, question2ScrollOffset);
         }
     });
 
     hint2Btn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#section-2 .question') || feedback2;
         feedback2.innerHTML = '<p class="feedback">Your <strong>prediction</strong> was based on the trend. Did the portal follow that trend at x = 5?</p>';
         feedback2.classList.remove('correct', 'incorrect');
+        if (next2Btn) next2Btn.classList.add('hidden');
+        smoothScrollToTarget(questionBlock || feedback2, question2ScrollOffset);
     });
 
     revealAnswer2Btn.addEventListener('click', () => {
         document.getElementById('mc-false').checked = true;
-        submitMcBtn.click();
+        feedback2.innerHTML = '<p class="correct">Correct! Your prediction (the limit) was 0, but the actual height at x = 5 was 1 meter. They are not the same!</p>';
+        feedback2.classList.remove('incorrect');
+        feedback2.classList.add('correct');
+        showNextButton(next2Btn, () => {
+            section3.classList.remove('hidden');
+            refreshVisibleCalculator(calculator3);
+            if (window.renderMathInElement) {
+                renderMathInElement(section3);
+            }
+            smoothScrollToTarget(section3, question3ScrollOffset);
+            next2Btn.classList.add('hidden');
+        });
+        smoothScrollToTarget(document.querySelector('#section-2 .question') || feedback2, question2ScrollOffset);
     });
     
     // Question 3 Logic
@@ -632,6 +699,7 @@ function updateDesmosTheme(isDark) {
     const submitLimitBtn = document.getElementById('submit-limit');
     const revealAnswer3Btn = document.getElementById('reveal-answer-3');
     const feedback3 = document.getElementById('feedback-3');
+    const next3Btn = document.getElementById('next-3');
     const limitReveal = document.getElementById('limit-reveal');
     const limit5Reveal = document.getElementById('limit-5-reveal');
     const aValueReveal = document.getElementById('a-value-reveal');
@@ -684,53 +752,87 @@ function updateDesmosTheme(isDark) {
     }
 
     submitLimitBtn.addEventListener('click', () => {
+        const questionBlock = guessLimitInput.closest('.question');
         const guess = parseFloat(guessLimitInput.value);
         if (Math.abs(guess - 0.5) < 0.0001) {
             feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0.5 as x approaches 0. That is the limit.</p>';
             feedback3.classList.remove('incorrect');
             feedback3.classList.add('correct');
-            revealLimit5Question();
+            showNextButton(next3Btn, () => {
+                revealLimit5Question();
+                smoothScrollToTarget(limit5Reveal || section4, question4ScrollOffset);
+                next3Btn.classList.add('hidden');
+            });
+            smoothScrollToTarget(questionBlock || feedback3, question3ScrollOffset);
         } else {
             feedback3.innerHTML = '<p class="incorrect">Not quite. Consider the value the function gets close to as x approaches 0 from both sides.</p>';
             feedback3.classList.remove('correct');
             feedback3.classList.add('incorrect');
+            if (next3Btn) next3Btn.classList.add('hidden');
+            smoothScrollToTarget(questionBlock || feedback3, question3ScrollOffset);
         }
     });
 
     revealAnswer3Btn.addEventListener('click', () => {
+        const questionBlock = guessLimitInput.closest('.question');
         guessLimitInput.value = '0.5';
-        submitLimitBtn.click();
-        revealLimit5Question();
+        feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0.5 as x approaches 0. That is the limit.</p>';
+        feedback3.classList.remove('incorrect');
+        feedback3.classList.add('correct');
+        showNextButton(next3Btn, () => {
+            revealLimit5Question();
+            smoothScrollToTarget(limit5Reveal || section4, question4ScrollOffset);
+            next3Btn.classList.add('hidden');
+        });
+        smoothScrollToTarget(questionBlock || feedback3, question3ScrollOffset);
     });
 
     const guessLimit5Input = document.getElementById('guess-limit-5');
     const submitLimit5Btn = document.getElementById('submit-limit-5');
     const revealAnswer5Btn = document.getElementById('reveal-answer-5');
     const feedback5 = document.getElementById('feedback-5');
+    const next5Btn = document.getElementById('next-5');
 
     submitLimit5Btn.addEventListener('click', () => {
+        const questionBlock = guessLimit5Input.closest('.question');
         const guess = parseFloat(guessLimit5Input.value);
         if (Math.abs(guess - 0) < 0.0001) {
             feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because at values near 4.999 (like 4.9989 and 4.9991), the car is still on the ground.</p>';
             feedback5.classList.remove('incorrect');
             feedback5.classList.add('correct');
-            revealAValueQuestion();
+            showNextButton(next5Btn, () => {
+                revealAValueQuestion();
+                smoothScrollToTarget(aValueReveal || section4, question5ScrollOffset);
+                next5Btn.classList.add('hidden');
+            });
+            smoothScrollToTarget(questionBlock || feedback5, question4ScrollOffset);
         } else {
             feedback5.innerHTML = '<p class="incorrect">Not quite. The function is still 0 for values extremely close to 4.999 from either side. So what is the limit at 4.999?</p>';
             feedback5.classList.remove('correct');
             feedback5.classList.add('incorrect');
+            if (next5Btn) next5Btn.classList.add('hidden');
+            smoothScrollToTarget(questionBlock || feedback5, question4ScrollOffset);
         }
     });
 
     revealAnswer5Btn.addEventListener('click', () => {
+        const questionBlock = guessLimit5Input.closest('.question');
         guessLimit5Input.value = '0';
-        submitLimit5Btn.click();
-        revealAValueQuestion();
+        feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because at values near 4.999 (like 4.9989 and 4.9991), the car is still on the ground.</p>';
+        feedback5.classList.remove('incorrect');
+        feedback5.classList.add('correct');
+        showNextButton(next5Btn, () => {
+            revealAValueQuestion();
+            smoothScrollToTarget(aValueReveal || section4, question5ScrollOffset);
+            next5Btn.classList.add('hidden');
+        });
+        smoothScrollToTarget(questionBlock || feedback5, question4ScrollOffset);
     });
 
     const submitMultiABtn = document.getElementById('submit-multi-a');
     const revealAnswerABtn = document.getElementById('reveal-answer-a');
     const feedbackA = document.getElementById('feedback-a');
+    const nextABtn = document.getElementById('next-a');
     const allPossibleAValues = ['-2', '0', '3', '5', '\\pi', '42.67'];
 
     function selectedAValues() {
@@ -745,10 +847,10 @@ function updateDesmosTheme(isDark) {
         feedbackA.innerHTML = '<p class="correct">All of these values are valid choices for a, because the limit statement only asks that the function approaches 0 as x gets close to a. The limit is about the nearby behavior, not the point itself.</p>';
         feedbackA.classList.remove('incorrect');
         feedbackA.classList.add('correct');
-        revealLimitExplanation();
     }
 
     submitMultiABtn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#a-value-reveal .question') || feedbackA;
         const selected = selectedAValues();
         const correct = allPossibleAValues.slice();
         const isCorrect = selected.length === correct.length && correct.every((value) => selected.includes(value));
@@ -757,16 +859,30 @@ function updateDesmosTheme(isDark) {
             feedbackA.innerHTML = '<p class="correct">Correct! Every listed value of a could work, because the limit statement only depends on how f(x) behaves as x gets close to a.</p>';
             feedbackA.classList.remove('incorrect');
             feedbackA.classList.add('correct');
-            revealLimitExplanation();
+            showNextButton(nextABtn, () => {
+                revealLimitExplanation();
+                smoothScrollToTarget(limitReveal || section4, question5ScrollOffset);
+                nextABtn.classList.add('hidden');
+            });
+            smoothScrollToTarget(questionBlock, question5ScrollOffset);
         } else {
             feedbackA.innerHTML = '<p class="incorrect">Not quite. If the limit is 0, then the function must <strong>approach 0</strong> as x gets close to a. Think about which values of a would make this true.</p>';
             feedbackA.classList.remove('correct');
             feedbackA.classList.add('incorrect');
+            if (nextABtn) nextABtn.classList.add('hidden');
+            smoothScrollToTarget(questionBlock, question5ScrollOffset);
         }
     });
 
     revealAnswerABtn.addEventListener('click', () => {
+        const questionBlock = document.querySelector('#a-value-reveal .question') || feedbackA;
         revealAllAValues();
+        showNextButton(nextABtn, () => {
+            revealLimitExplanation();
+            smoothScrollToTarget(limitReveal || section4, 150);
+            nextABtn.classList.add('hidden');
+        });
+        smoothScrollToTarget(questionBlock, question5ScrollOffset);
     });
 
 });
