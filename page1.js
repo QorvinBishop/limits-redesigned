@@ -530,16 +530,18 @@ function updateDesmosTheme(isDark) {
     // Question 1 Logic
     const guessHeight4999Input = document.getElementById('guess-height-4999');
     const submitGuess4999Btn = document.getElementById('submit-guess-4999');
+    const hint4999Btn = document.getElementById('hint-4999');
     const retryGuess4999Btn = document.getElementById('retry-guess-4999');
     const feedback4999 = document.getElementById('feedback-4999');
     const guessHeight5001Input = document.getElementById('guess-height-5001');
     const submitGuess5001Btn = document.getElementById('submit-guess-5001');
+    const hint5001Btn = document.getElementById('hint-5001');
     const retryGuess5001Btn = document.getElementById('retry-guess-5001');
     const feedback5001 = document.getElementById('feedback-5001');
     const guessInput = document.getElementById('guess-height');
     const submitGuessBtn = document.getElementById('submit-guess');
     const hint1Btn = document.getElementById('hint-1');
-    const revealAnswer1Btn = document.getElementById('reveal-answer-1');
+    const retryGuessBtn = document.getElementById('retry-guess');
     const feedback1 = document.getElementById('feedback-1');
     const next1Btn = document.getElementById('next-1');
 
@@ -557,24 +559,79 @@ function updateDesmosTheme(isDark) {
         return false;
     }
 
+    function setQuestionDisabled(input, submitBtn, hintBtn, revealBtn, retryBtn, disabled, showRetry) {
+        const controls = [input, submitBtn, hintBtn, revealBtn].filter(Boolean);
+        controls.forEach((control) => {
+            control.disabled = disabled;
+        });
+        if (retryBtn) {
+            retryBtn.classList.toggle('hidden', !showRetry);
+            retryBtn.disabled = false;
+        }
+    }
+
+    const revealWrongAttemptThreshold = 3;
+    const revealWrongAttempts = new Map();
+
+    function updateRevealGateState(button, key) {
+        if (!button) return;
+        const count = revealWrongAttempts.get(key) || 0;
+        const shouldShow = count >= revealWrongAttemptThreshold;
+        button.classList.toggle('hidden', !shouldShow);
+        button.disabled = !shouldShow;
+    }
+
+    function revealGateOnWrong(button, key) {
+        if (!button) return;
+        registerWrongAttempt(key, button);
+    }
+
+    function registerWrongAttempt(key, button) {
+        const count = (revealWrongAttempts.get(key) || 0) + 1;
+        revealWrongAttempts.set(key, count);
+        updateRevealGateState(button, key);
+        return count;
+    }
+
+    function resetRevealGate(key, button) {
+        revealWrongAttempts.set(key, 0);
+        updateRevealGateState(button, key);
+    }
+
     submitGuess4999Btn.addEventListener('click', () => {
-        checkNearPointGuess(guessHeight4999Input, feedback4999, 0, 'Correct! At x = 4.999, the camera sees that the car is on the road, so the height is 0.');
+        const isCorrect = checkNearPointGuess(guessHeight4999Input, feedback4999, 0, 'Correct! At x = 4.999, the camera sees that the car is on the road, so the height is 0.');
+        setQuestionDisabled(guessHeight4999Input, submitGuess4999Btn, hint4999Btn, null, retryGuess4999Btn, true, !isCorrect);
+    });
+
+    hint4999Btn.addEventListener('click', () => {
+        feedback4999.innerHTML = '<p class="feedback">Think about the road just before and after x = 5. If the car is on the road, what is its height?</p>';
+        feedback4999.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessHeight4999Input, submitGuess4999Btn, hint4999Btn, null, retryGuess4999Btn, false, false);
     });
 
     retryGuess4999Btn.addEventListener('click', () => {
         guessHeight4999Input.value = '';
         feedback4999.innerHTML = '';
         feedback4999.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessHeight4999Input, submitGuess4999Btn, hint4999Btn, null, retryGuess4999Btn, false, false);
     });
 
     submitGuess5001Btn.addEventListener('click', () => {
-        checkNearPointGuess(guessHeight5001Input, feedback5001, 0, 'Correct! At x = 5.001, the camera sees that the car is on the road, so the height is 0.');
+        const isCorrect = checkNearPointGuess(guessHeight5001Input, feedback5001, 0, 'Correct! At x = 5.001, the camera sees that the car is on the road, so the height is 0.');
+        setQuestionDisabled(guessHeight5001Input, submitGuess5001Btn, hint5001Btn, null, retryGuess5001Btn, true, !isCorrect);
+    });
+
+    hint5001Btn.addEventListener('click', () => {
+        feedback5001.innerHTML = '<p class="feedback">Think about the road just before and after x = 5. If the car is on the road, what is its height?</p>';
+        feedback5001.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessHeight5001Input, submitGuess5001Btn, hint5001Btn, null, retryGuess5001Btn, false, false);
     });
 
     retryGuess5001Btn.addEventListener('click', () => {
         guessHeight5001Input.value = '';
         feedback5001.innerHTML = '';
         feedback5001.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessHeight5001Input, submitGuess5001Btn, hint5001Btn, null, retryGuess5001Btn, false, false);
     });
 
     function showNextButton(button, onNext) {
@@ -590,6 +647,7 @@ function updateDesmosTheme(isDark) {
             feedback1.innerHTML = "<p class=\"correct\">You made a reasonable guess! Based on the surrounding path, 0 meters is exactly what we'd expect. However, some mischievous guy named <strong>Waniel</strong> placed a portal there!</p>";
             feedback1.classList.remove('incorrect');
             feedback1.classList.add('correct');
+            setQuestionDisabled(guessInput, submitGuessBtn, hint1Btn, null, retryGuessBtn, true, false);
             showNextButton(next1Btn, () => {
                 section2.classList.remove('hidden');
                 refreshVisibleCalculator(calculator2);
@@ -605,6 +663,7 @@ function updateDesmosTheme(isDark) {
             feedback1.classList.remove('correct');
             feedback1.classList.add('incorrect');
             if (next1Btn) next1Btn.classList.add('hidden');
+            setQuestionDisabled(guessInput, submitGuessBtn, hint1Btn, null, retryGuessBtn, true, true);
             smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
         }
     });
@@ -614,25 +673,16 @@ function updateDesmosTheme(isDark) {
         feedback1.innerHTML = '<p class="feedback">Think about the car\'s height just before and just after x = 5. What height does it <strong>approach</strong>?</p>';
         feedback1.classList.remove('correct', 'incorrect');
         if (next1Btn) next1Btn.classList.add('hidden');
+        setQuestionDisabled(guessInput, submitGuessBtn, hint1Btn, null, retryGuessBtn, false, false);
         smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
     });
 
-    revealAnswer1Btn.addEventListener('click', () => {
-        const questionBlock = document.querySelector('#guess-height').closest('.question');
-        guessInput.value = '0';
-        feedback1.innerHTML = "<p class=\"correct\">You made a reasonable guess! Based on the surrounding path, 0 meters is exactly what we'd expect. However, some mischievous guy named <strong>Waniel</strong> placed a portal there!</p>";
-        feedback1.classList.remove('incorrect');
-        feedback1.classList.add('correct');
-        showNextButton(next1Btn, () => {
-            section2.classList.remove('hidden');
-            refreshVisibleCalculator(calculator2);
-            if (window.renderMathInElement) {
-                renderMathInElement(section2);
-            }
-            smoothScrollToTarget(section2, question2ScrollOffset);
-            next1Btn.classList.add('hidden');
-        });
-        smoothScrollToTarget(questionBlock || feedback1, question1ScrollOffset);
+    retryGuessBtn.addEventListener('click', () => {
+        guessInput.value = '';
+        feedback1.innerHTML = '';
+        feedback1.classList.remove('correct', 'incorrect');
+        if (next1Btn) next1Btn.classList.add('hidden');
+        setQuestionDisabled(guessInput, submitGuessBtn, hint1Btn, null, retryGuessBtn, false, false);
     });
 
 
@@ -650,6 +700,11 @@ function updateDesmosTheme(isDark) {
             feedback2.innerHTML = '<p class="correct">Correct! Your prediction (the limit) was 0, but the actual height at x = 5 was 1 meter. They are not the same!</p>';
             feedback2.classList.remove('incorrect');
             feedback2.classList.add('correct');
+            const mcInputs = document.querySelectorAll('input[name="prediction-match"]');
+            mcInputs.forEach((input) => { input.disabled = true; });
+            document.getElementById('submit-mc').disabled = true;
+            document.getElementById('hint-2').disabled = true;
+            document.getElementById('reveal-answer-2').disabled = true;
             showNextButton(next2Btn, () => {
                 section3.classList.remove('hidden');
                 refreshVisibleCalculator(calculator3);
@@ -664,6 +719,12 @@ function updateDesmosTheme(isDark) {
             feedback2.innerHTML = '<p class="incorrect">Not quite. Think about what your prediction was for the car\'s height at x = 5, versus what actually happened due to the portal.</p>';
             feedback2.classList.remove('correct');
             feedback2.classList.add('incorrect');
+            const mcInputs = document.querySelectorAll('input[name="prediction-match"]');
+            mcInputs.forEach((input) => { input.disabled = true; });
+            document.getElementById('submit-mc').disabled = true;
+            document.getElementById('hint-2').disabled = true;
+            document.getElementById('reveal-answer-2').disabled = true;
+            document.getElementById('retry-guess-2').classList.remove('hidden');
             if (next2Btn) next2Btn.classList.add('hidden');
             smoothScrollToTarget(questionBlock || feedback2, question2ScrollOffset);
         }
@@ -673,8 +734,25 @@ function updateDesmosTheme(isDark) {
         const questionBlock = document.querySelector('#section-2 .question') || feedback2;
         feedback2.innerHTML = '<p class="feedback">Your <strong>prediction</strong> was based on the trend. Did the portal follow that trend at x = 5?</p>';
         feedback2.classList.remove('correct', 'incorrect');
+        const mcInputs = document.querySelectorAll('input[name="prediction-match"]');
+        mcInputs.forEach((input) => { input.disabled = false; });
+        document.getElementById('submit-mc').disabled = false;
+        document.getElementById('hint-2').disabled = false;
+        document.getElementById('reveal-answer-2').disabled = false;
+        document.getElementById('retry-guess-2').classList.add('hidden');
         if (next2Btn) next2Btn.classList.add('hidden');
         smoothScrollToTarget(questionBlock || feedback2, question2ScrollOffset);
+    });
+
+    document.getElementById('retry-guess-2').addEventListener('click', () => {
+        const mcInputs = document.querySelectorAll('input[name="prediction-match"]');
+        mcInputs.forEach((input) => { input.disabled = false; input.checked = false; });
+        document.getElementById('submit-mc').disabled = false;
+        document.getElementById('hint-2').disabled = false;
+        document.getElementById('reveal-answer-2').disabled = false;
+        document.getElementById('retry-guess-2').classList.add('hidden');
+        feedback2.innerHTML = '';
+        feedback2.classList.remove('correct', 'incorrect');
     });
 
     revealAnswer2Btn.addEventListener('click', () => {
@@ -682,6 +760,11 @@ function updateDesmosTheme(isDark) {
         feedback2.innerHTML = '<p class="correct">Correct! Your prediction (the limit) was 0, but the actual height at x = 5 was 1 meter. They are not the same!</p>';
         feedback2.classList.remove('incorrect');
         feedback2.classList.add('correct');
+        const mcInputs = document.querySelectorAll('input[name="prediction-match"]');
+        mcInputs.forEach((input) => { input.disabled = true; });
+        document.getElementById('submit-mc').disabled = true;
+        document.getElementById('hint-2').disabled = true;
+        document.getElementById('reveal-answer-2').disabled = true;
         showNextButton(next2Btn, () => {
             section3.classList.remove('hidden');
             refreshVisibleCalculator(calculator3);
@@ -758,6 +841,8 @@ function updateDesmosTheme(isDark) {
             feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0.5 as x approaches 0. That is the limit.</p>';
             feedback3.classList.remove('incorrect');
             feedback3.classList.add('correct');
+            resetRevealGate('limit-3', revealAnswer3Btn);
+            setQuestionDisabled(guessLimitInput, submitLimitBtn, document.getElementById('hint-3'), null, document.getElementById('retry-guess-3'), true, false);
             showNextButton(next3Btn, () => {
                 revealLimit5Question();
                 smoothScrollToTarget(limit5Reveal || section4, question4ScrollOffset);
@@ -768,9 +853,26 @@ function updateDesmosTheme(isDark) {
             feedback3.innerHTML = '<p class="incorrect">Not quite. Consider the value the function gets close to as x approaches 0 from both sides.</p>';
             feedback3.classList.remove('correct');
             feedback3.classList.add('incorrect');
+            revealGateOnWrong(revealAnswer3Btn, 'limit-3');
+            setQuestionDisabled(guessLimitInput, submitLimitBtn, document.getElementById('hint-3'), null, document.getElementById('retry-guess-3'), true, true);
             if (next3Btn) next3Btn.classList.add('hidden');
             smoothScrollToTarget(questionBlock || feedback3, question3ScrollOffset);
         }
+    });
+
+    document.getElementById('retry-guess-3').addEventListener('click', () => {
+        guessLimitInput.value = '';
+        feedback3.innerHTML = '';
+        feedback3.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessLimitInput, submitLimitBtn, document.getElementById('hint-3'), null, document.getElementById('retry-guess-3'), false, false);
+        if (next3Btn) next3Btn.classList.add('hidden');
+    });
+
+    document.getElementById('hint-3').addEventListener('click', () => {
+        feedback3.innerHTML = '<p class="feedback">Look at the graph near x = 0. What value does the function get close to from the left and right?</p>';
+        feedback3.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessLimitInput, submitLimitBtn, document.getElementById('hint-3'), null, document.getElementById('retry-guess-3'), false, false);
+        if (next3Btn) next3Btn.classList.add('hidden');
     });
 
     revealAnswer3Btn.addEventListener('click', () => {
@@ -779,6 +881,8 @@ function updateDesmosTheme(isDark) {
         feedback3.innerHTML = '<p class="correct">Correct! The function approaches 0.5 as x approaches 0. That is the limit.</p>';
         feedback3.classList.remove('incorrect');
         feedback3.classList.add('correct');
+        resetRevealGate('limit-3', revealAnswer3Btn);
+        setQuestionDisabled(guessLimitInput, submitLimitBtn, document.getElementById('hint-3'), null, document.getElementById('retry-guess-3'), true, false);
         showNextButton(next3Btn, () => {
             revealLimit5Question();
             smoothScrollToTarget(limit5Reveal || section4, question4ScrollOffset);
@@ -800,6 +904,8 @@ function updateDesmosTheme(isDark) {
             feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because at values near 4.999 (like 4.9989 and 4.9991), the car is still on the ground.</p>';
             feedback5.classList.remove('incorrect');
             feedback5.classList.add('correct');
+            resetRevealGate('limit-5', revealAnswer5Btn);
+            setQuestionDisabled(guessLimit5Input, submitLimit5Btn, document.getElementById('hint-5'), null, document.getElementById('retry-guess-5'), true, false);
             showNextButton(next5Btn, () => {
                 revealAValueQuestion();
                 smoothScrollToTarget(aValueReveal || section4, question5ScrollOffset);
@@ -810,9 +916,26 @@ function updateDesmosTheme(isDark) {
             feedback5.innerHTML = '<p class="incorrect">Not quite. The function is still 0 for values extremely close to 4.999 from either side. So what is the limit at 4.999?</p>';
             feedback5.classList.remove('correct');
             feedback5.classList.add('incorrect');
+            revealGateOnWrong(revealAnswer5Btn, 'limit-5');
+            setQuestionDisabled(guessLimit5Input, submitLimit5Btn, document.getElementById('hint-5'), null, document.getElementById('retry-guess-5'), true, true);
             if (next5Btn) next5Btn.classList.add('hidden');
             smoothScrollToTarget(questionBlock || feedback5, question4ScrollOffset);
         }
+    });
+
+    document.getElementById('retry-guess-5').addEventListener('click', () => {
+        guessLimit5Input.value = '';
+        feedback5.innerHTML = '';
+        feedback5.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessLimit5Input, submitLimit5Btn, document.getElementById('hint-5'), null, document.getElementById('retry-guess-5'), false, false);
+        if (next5Btn) next5Btn.classList.add('hidden');
+    });
+
+    document.getElementById('hint-5').addEventListener('click', () => {
+        feedback5.innerHTML = '<p class="feedback">Near x = 4.999, the car is still on the ground, so what height does it approach?</p>';
+        feedback5.classList.remove('correct', 'incorrect');
+        setQuestionDisabled(guessLimit5Input, submitLimit5Btn, document.getElementById('hint-5'), null, document.getElementById('retry-guess-5'), false, false);
+        if (next5Btn) next5Btn.classList.add('hidden');
     });
 
     revealAnswer5Btn.addEventListener('click', () => {
@@ -821,6 +944,8 @@ function updateDesmosTheme(isDark) {
         feedback5.innerHTML = '<p class="correct">Correct! The limit as x approaches 4.999 is 0, because at values near 4.999 (like 4.9989 and 4.9991), the car is still on the ground.</p>';
         feedback5.classList.remove('incorrect');
         feedback5.classList.add('correct');
+        resetRevealGate('limit-5', revealAnswer5Btn);
+        setQuestionDisabled(guessLimit5Input, submitLimit5Btn, document.getElementById('hint-5'), null, document.getElementById('retry-guess-5'), true, false);
         showNextButton(next5Btn, () => {
             revealAValueQuestion();
             smoothScrollToTarget(aValueReveal || section4, question5ScrollOffset);
@@ -859,6 +984,11 @@ function updateDesmosTheme(isDark) {
             feedbackA.innerHTML = '<p class="correct">Correct! Every listed value of a could work, because the limit statement only depends on how f(x) behaves as x gets close to a.</p>';
             feedbackA.classList.remove('incorrect');
             feedbackA.classList.add('correct');
+            const checkboxes = document.querySelectorAll('input[name="possible-a"]');
+            checkboxes.forEach((checkbox) => { checkbox.disabled = true; });
+            document.getElementById('submit-multi-a').disabled = true;
+            document.getElementById('hint-a').disabled = true;
+            resetRevealGate('possible-a', revealAnswerABtn);
             showNextButton(nextABtn, () => {
                 revealLimitExplanation();
                 smoothScrollToTarget(limitReveal || section4, question5ScrollOffset);
@@ -869,14 +999,42 @@ function updateDesmosTheme(isDark) {
             feedbackA.innerHTML = '<p class="incorrect">Not quite. If the limit is 0, then the function must <strong>approach 0</strong> as x gets close to a. Think about which values of a would make this true.</p>';
             feedbackA.classList.remove('correct');
             feedbackA.classList.add('incorrect');
+            const checkboxes = document.querySelectorAll('input[name="possible-a"]');
+            checkboxes.forEach((checkbox) => { checkbox.disabled = true; });
+            document.getElementById('submit-multi-a').disabled = true;
+            document.getElementById('hint-a').disabled = true;
+            revealGateOnWrong(revealAnswerABtn, 'possible-a');
+            document.getElementById('retry-guess-a').classList.remove('hidden');
             if (nextABtn) nextABtn.classList.add('hidden');
             smoothScrollToTarget(questionBlock, question5ScrollOffset);
         }
     });
 
+    document.getElementById('hint-a').addEventListener('click', () => {
+        feedbackA.innerHTML = '<p class="feedback">The limit cares about nearby values of x, not the exact point itself. Which values of a keep the function near 0?</p>';
+        feedbackA.classList.remove('correct', 'incorrect');
+        const checkboxes = document.querySelectorAll('input[name="possible-a"]');
+        checkboxes.forEach((checkbox) => { checkbox.disabled = false; });
+        document.getElementById('submit-multi-a').disabled = false;
+        document.getElementById('hint-a').disabled = false;
+        document.getElementById('retry-guess-a').classList.add('hidden');
+        if (nextABtn) nextABtn.classList.add('hidden');
+    });
+
+    document.getElementById('retry-guess-a').addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll('input[name="possible-a"]');
+        checkboxes.forEach((checkbox) => { checkbox.disabled = false; checkbox.checked = false; });
+        document.getElementById('submit-multi-a').disabled = false;
+        document.getElementById('hint-a').disabled = false;
+        document.getElementById('retry-guess-a').classList.add('hidden');
+        feedbackA.innerHTML = '';
+        feedbackA.classList.remove('correct', 'incorrect');
+    });
+
     revealAnswerABtn.addEventListener('click', () => {
         const questionBlock = document.querySelector('#a-value-reveal .question') || feedbackA;
         revealAllAValues();
+        resetRevealGate('possible-a', revealAnswerABtn);
         showNextButton(nextABtn, () => {
             revealLimitExplanation();
             smoothScrollToTarget(limitReveal || section4, 150);

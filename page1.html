@@ -71,25 +71,33 @@
                 <p>What is the car's height at $x = 4.999$ meters?</p>
             </div>
             <input type="number" id="guess-height-4999" placeholder="Your guess in meters">
-            <button id="submit-guess-4999">Submit Guess</button>
-            <button id="retry-guess-4999" class="secondary">Retry</button>
+            <div class="button-row">
+                <button id="submit-guess-4999">Submit Guess</button>
+                <button id="hint-4999" class="secondary">Hint</button>
+                <button id="retry-guess-4999" class="secondary retry-button hidden">Retry</button>
+            </div>
             <div id="feedback-4999" class="feedback"></div>
 
             <div class="question">
                 <p>What is the car's height at $x = 5.001$ meters?</p>
             </div>
             <input type="number" id="guess-height-5001" placeholder="Your guess in meters">
-            <button id="submit-guess-5001">Submit Guess</button>
-            <button id="retry-guess-5001" class="secondary">Retry</button>
+            <div class="button-row">
+                <button id="submit-guess-5001">Submit Guess</button>
+                <button id="hint-5001" class="secondary">Hint</button>
+                <button id="retry-guess-5001" class="secondary retry-button hidden">Retry</button>
+            </div>
             <div id="feedback-5001" class="feedback"></div>
 
             <div class="question">
                 <p>Make an educated guess: What do you expect the car's height to be at $x = 5$ (in meters)?</p>
             </div>
             <input type="number" id="guess-height" placeholder="Your guess in meters">
-            <button id="submit-guess">Submit Guess</button>
-            <button id="hint-1" class="secondary">Hint</button>
-            <button id="reveal-answer-1" class="secondary warning">Reveal Answer</button>
+            <div class="button-row">
+                <button id="submit-guess">Submit Guess</button>
+                <button id="hint-1" class="secondary">Hint</button>
+                <button id="retry-guess" class="secondary retry-button hidden">Retry</button>
+            </div>
             <div id="feedback-1" class="feedback"></div>
             <button id="next-1" class="secondary hidden" type="button">Next</button>
         </div>
@@ -113,9 +121,12 @@
                 <input type="radio" id="mc-false" name="prediction-match" value="false">
                 <label for="mc-false">No</label><br>
             </div>
-            <button id="submit-mc">Submit</button>
-            <button id="hint-2" class="secondary">Hint</button>
-            <button id="reveal-answer-2" class="secondary warning">Reveal Answer</button>
+            <div class="button-row">
+                <button id="submit-mc">Submit</button>
+                <button id="hint-2" class="secondary">Hint</button>
+                <button id="reveal-answer-2" class="secondary warning">Reveal Answer</button>
+                <button id="retry-guess-2" class="secondary retry-button hidden">Retry</button>
+            </div>
             <div id="feedback-2" class="feedback"></div>
             <button id="next-2" class="secondary hidden" type="button">Next</button>
         </div>
@@ -137,8 +148,12 @@
                 <p>What does the function approach as $x$ approaches $ 0 $?</p>
             </div>
             <input type="number" id="guess-limit" placeholder="Answer:">
-            <button id="submit-limit">Submit Guess</button>
-            <button id="reveal-answer-3" class="secondary warning">Reveal Answer</button>
+            <div class="button-row">
+                <button id="submit-limit">Submit Guess</button>
+                <button id="hint-3" class="secondary">Hint</button>
+                <button id="reveal-answer-3" class="secondary warning hidden">Reveal Answer</button>
+                <button id="retry-guess-3" class="secondary retry-button hidden">Retry</button>
+            </div>
             <div id="feedback-3" class="feedback"></div>
             <button id="next-3" class="secondary hidden" type="button">Next</button>
         </div>
@@ -154,8 +169,12 @@
                     <p>What is $\lim_{x \to 4.999} f(x)$ equal to?</p>
                 </div>
                 <input type="number" id="guess-limit-5" placeholder="Answer:">
-                <button id="submit-limit-5">Submit</button>
-                <button id="reveal-answer-5" class="secondary warning">Reveal Answer</button>
+                <div class="button-row">
+                    <button id="submit-limit-5">Submit</button>
+                    <button id="hint-5" class="secondary">Hint</button>
+                    <button id="reveal-answer-5" class="secondary warning hidden">Reveal Answer</button>
+                    <button id="retry-guess-5" class="secondary retry-button hidden">Retry</button>
+                </div>
                 <div id="feedback-5" class="feedback"></div>
                 <button id="next-5" class="secondary hidden" type="button">Next</button>
             </div>
@@ -181,8 +200,12 @@
                     <input type="checkbox" id="a-decimal" name="possible-a" value="42.67">
                     <label for="a-decimal">$a=42.67$</label>
                 </div>
-                <button id="submit-multi-a">Submit Selection</button>
-                <button id="reveal-answer-a" class="secondary warning">Reveal Answer</button>
+                <div class="button-row">
+                    <button id="submit-multi-a">Submit Selection</button>
+                    <button id="hint-a" class="secondary">Hint</button>
+                    <button id="reveal-answer-a" class="secondary warning hidden">Reveal Answer</button>
+                    <button id="retry-guess-a" class="secondary retry-button hidden">Retry</button>
+                </div>
                 <div id="feedback-a" class="feedback"></div>
                 <button id="next-a" class="secondary hidden" type="button">Next</button>
             </div>
