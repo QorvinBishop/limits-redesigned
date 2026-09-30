@@ -1,12 +1,12 @@
 # Limits Redesigned
 
-A work-in-progress interactive web experience for learning calculus through visual exploration, playful problem-solving, and intuitive engagement. This project reimagines calculus education as a more approachable, exploratory journey for high school students who may be curious, unsure, or already interested in the subject.
+A work-in-progress interactive web experience for learning calculus through visual exploration, playful problem-solving, and intuitive engagement. This project reimagines calculus education as a more approachable, exploratory journey for middle and high school students, as well as anyone curious about the subject.
 
-The site is designed to help learners understand foundational ideas such as limits, derivatives, and integrals in a way that feels less abstract and more discoverable. Rather than presenting calculus as a wall of formulas, it invites students to experiment, notice patterns, and build understanding through guided interaction.
+The current experience introduces limits through an interactive lesson and includes an in-progress continuity lesson. Rather than presenting calculus as a wall of formulas, it invites students to experiment, notice patterns, and build understanding through guided interaction.
 
 ## Overview
 
-Limits Redesigned is being developed as a lightweight educational web app built with static HTML, CSS, and JavaScript. It is intended to supplement traditional learning rather than replace it, and to make calculus feel more engaging and human.
+Limits Redesigned (branded on the site as Calculus Explorer) is a lightweight educational website built with static HTML, CSS, and JavaScript. It is intended to supplement traditional learning rather than replace it, and to make calculus feel more engaging and human.
 
 This project is especially aimed at students who may be:
 
@@ -31,10 +31,11 @@ This project is not limited to the scope of a standard AP Calculus course. It ai
 
 ## Target audience
 
-- High school students currently studying calculus
+- Middle and high school students curious about mathematics and calculus
 - Former learners who want to revisit concepts in a more approachable way
 - Prospective calculus students who want a gentler introduction before formal coursework
 - Teachers and parents looking for supplementary learning experiences
+- Anyone with a curious mind
 
 ## What this project is and is not
 
@@ -49,23 +50,27 @@ The focus here is on introducing ideas intuitively and helping students understa
 - HTML5
 - CSS3
 - JavaScript
-- Static site structure
-- No build tools
-- No server required for local viewing
+- Desmos API for interactive graphs
+- KaTeX for mathematical notation
+- Static, multi-page site; no build tools or backend
 
-The project is intentionally lightweight and portable, designed to be easy to run and easy to extend as the learning modules expand.
+The project is intentionally lightweight and portable. The pages load Desmos and KaTeX from external services, so an internet connection is needed for graphs and rendered math.
+
+## Run locally
+
+Open `index.html` in a browser to view the site. For a local web server, run `python3 -m http.server 8000` from the project directory and visit `http://localhost:8000`. An internet connection is needed for the embedded Desmos and KaTeX resources.
 
 ## Development environment
 
 - macOS
-- Single-page/static site architecture
+- Multi-page/static site architecture
 - No framework required
 - Minimal tooling and dependency overhead
 - Designed for quick iteration and experimentation
 
 ## Project status
 
-This project is actively under development. Some pages and modules are complete or partially complete, while others are planned or in progress. The current goal is to keep the experience accessible, conceptually rich, and easy to expand over time.
+This project is actively under development. The limits lesson is the primary interactive lesson. A continuity lesson is also present at `page2.html`, but is labeled template-only and is not yet linked from the main navigation. Derivatives and integrals are not currently covered by the site. The current goal is to keep the experience accessible, conceptually rich, and easy to expand over time.
 
 ## Live demo
 
@@ -75,9 +80,10 @@ This project is actively under development. Some pages and modules are complete 
 
 The repository currently includes:
 
-- `index.html` — landing page and project overview
-- `page1.html` / `page1.js` / `page1.css` — limit-focused gameplay / exploration module
-- `page2.html` / `page2.js` — derivative-related section
+- `index.html` — Calculus Explorer homepage
+- `about.html` — project mission and background
+- `page1.html` / `page1.js` — interactive limits lesson, including Desmos graphs, theme and motion controls, and guided questions
+- `page2.html` / `page2.js` — template-only continuity lesson with interactive questions
 - `global.css` — shared styling
 - `v1/` — earlier prototype iteration
 
