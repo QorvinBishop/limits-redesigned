@@ -5,3 +5,6 @@
 /PPI_PRESENTATION_SCRIPT.md
 /6_WEEK_ROADMAP.md
 /PAGE_FEATURE_LIST.md
+/instance/
+/.env
+__pycache__/
