@@ -572,6 +572,22 @@ button.warning:hover {
     margin-top: 1.5rem;
 }
 
+.feedback-embed-wrapper {
+    width: 100%;
+    margin-top: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--current-border-color);
+    border-radius: 8px;
+    background-color: var(--current-section-bg);
+}
+
+.feedback-embed {
+    display: block;
+    width: 100%;
+    height: 1200px;
+    border: 0;
+}
+
 .feedback-form label {
     display: block;
     margin-bottom: 0.4rem;

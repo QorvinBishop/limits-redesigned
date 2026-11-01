@@ -34,13 +34,21 @@
             <p>Your notes help make Calculus Explorer clearer and more useful. You do not need to include your name,
                 email, school, or other personal information.</p>
 
-            <div id="local-instructions" class="feedback-message">
-                <p>The feedback form needs the Flask app to be running. From the project folder, run
-                    <code>python3 app.py</code>, then select the button below.</p>
+            <p>Responses are collected by Google Forms. Please do not include personal or identifying information.</p>
+
+            <div class="feedback-embed-wrapper">
+                <iframe
+                    class="feedback-embed"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSeZxYefxGdM2ZWuFWg-JuFsyshVeZhZN5G1RBl7IZr6qRrS5Q/viewform?embedded=true"
+                    title="Calculus Explorer feedback form"
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
             </div>
 
+            <p class="form-help">If the form does not load above, <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZxYefxGdM2ZWuFWg-JuFsyshVeZhZN5G1RBl7IZr6qRrS5Q/viewform" target="_blank" rel="noopener noreferrer">open the feedback form directly on Google Forms</a>.</p>
+
             <div class="button-row">
-                <a id="open-feedback-form" class="page-link" href="http://127.0.0.1:5001/feedback">Open feedback form</a>
                 <a class="page-link secondary" href="index.html">Back to home</a>
             </div>
         </section>
@@ -49,8 +57,6 @@
     <script>
         const body = document.body;
         const themeToggle = document.getElementById('theme-toggle');
-        const feedbackFormLink = document.getElementById('open-feedback-form');
-        const localInstructions = document.getElementById('local-instructions');
 
         function updateThemeLabel() {
             const isDark = body.classList.contains('dark-theme');
@@ -66,11 +72,6 @@
 
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-theme');
-        }
-
-        if (window.location.protocol !== 'file:') {
-            feedbackFormLink.href = `/feedback${window.location.search}`;
-            localInstructions.hidden = true;
         }
 
         updateThemeLabel();

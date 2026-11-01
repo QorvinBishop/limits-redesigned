@@ -1,10 +1,6 @@
-# Private PPI working documents
-/PROJECT_SUMMARY.md
-/PROJECT_REFLECTION.md
-/PPI_PRESENTATION_OUTLINE.md
-/PPI_PRESENTATION_SCRIPT.md
-/6_WEEK_ROADMAP.md
-/PAGE_FEATURE_LIST.md
+# Local-only project archive and working files
+/local/
 /instance/
 /.env
 __pycache__/
+/GOOGLE_FORM_QUESTIONS.md

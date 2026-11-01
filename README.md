@@ -50,29 +50,21 @@ The focus here is on introducing ideas intuitively and helping students understa
 - HTML5
 - CSS3
 - JavaScript
-- Python and Flask for the feedback collector
-- SQLite for local feedback storage
+- Google Forms for feedback collection
 - Desmos API for interactive graphs
 - KaTeX for mathematical notation
-- Multi-page site with static lesson pages and a small Flask feedback backend
+- Multi-page static site hosted on GitHub Pages
 
-The project is intentionally lightweight and portable. The pages load Desmos and KaTeX from external services, so an internet connection is needed for graphs and rendered math. Feedback is available when the site is served through Flask; GitHub Pages does not run the Python backend.
+The project is intentionally lightweight and portable. The pages load Desmos and KaTeX from external services, so an internet connection is needed for graphs and rendered math. Feedback is submitted through an embedded Google Form, with a direct link available as a fallback. GitHub Pages serves the site without a backend.
 
 ## Run locally
 
-Install dependencies with `python3 -m pip install -r requirements.txt`, then run `python3 app.py` from the project directory and visit `http://127.0.0.1:5001`. The app serves the existing lesson pages and the feedback form. Port 5000 may be occupied by macOS AirPlay Receiver, so the development server uses port 5001. If you open a lesson directly from disk, its Feedback link opens a local instruction page; start Flask and select “Open feedback form” there to submit. An internet connection is needed for the embedded Desmos, KaTeX, and Google Analytics resources.
-
-The collector stores submissions in `instance/feedback.sqlite3`. Feedback is treated as plain text: the server normalizes Unicode, removes control characters, trims whitespace, validates category/page choices, and limits the message to 2,000 characters. Database writes use SQL parameters, and Jinja auto-escapes values when displayed. The form does not ask for names, email addresses, or school information.
-
-For deployment, set a persistent, random `FLASK_SECRET_KEY` environment variable and enable secure session cookies by setting `FLASK_COOKIE_SECURE=1` behind HTTPS. Keep the `instance/` database private and back it up securely. Do not deploy the feedback collector on GitHub Pages; use a Python-capable host.
-
-To inspect collected submissions on macOS, use `sqlite3 instance/feedback.sqlite3 "SELECT created_at, kind, page, details FROM feedback ORDER BY id DESC;"`. Handle the output as private learner feedback.
+Open `index.html` in a browser, or serve the project directory with `python3 -m http.server 8000` and visit `http://localhost:8000`. An internet connection is needed for the embedded Google Form, Desmos graphs, KaTeX, and Google Analytics.
 
 ## Development environment
 
 - macOS
-- Multi-page site with static lesson pages and a Flask feedback endpoint
-- SQLite database stored outside the web-served directory
+- Static site hosted on GitHub Pages
 - Minimal tooling and dependency overhead
 - Designed for quick iteration and experimentation
 
@@ -93,10 +85,10 @@ The repository currently includes:
 - `page1.html` / `page1.js` — interactive limits lesson, including Desmos graphs, theme and motion controls, and guided questions
 - `page2.html` / `page2.js` — template-only continuity lesson with interactive questions
 - `global.css` — shared styling
-- `app.py` / `templates/feedback.html` — Flask feedback form and collector
-- `instance/feedback.sqlite3` — local feedback database (created after the first valid submission; ignored by Git)
-- `tests/test_feedback.py` — feedback collector tests
-- `v1/` — earlier prototype iteration
+- `feedback.html` — feedback page with the embedded Google Form and direct-link fallback
+- `GOOGLE_FORM_QUESTIONS.md` — copy-ready form title, description, questions, and choices
+
+Older backend code, the earlier `v1/` prototype, and project/presentation documents are kept in the ignored `local/archive/` folder on the working computer; they are not part of the GitHub Pages site or repository.
 
 ## Credits and acknowledgments
 
