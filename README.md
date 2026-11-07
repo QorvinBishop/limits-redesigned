@@ -1,12 +1,12 @@
 # Limits Redesigned
 
-A work-in-progress interactive web experience for learning calculus through visual exploration, playful problem-solving, and intuitive engagement. This project reimagines calculus education as a more approachable, exploratory journey for middle and high school students, as well as anyone curious about the subject.
+A work-in-progress interactive website that introduces calculus through visual exploration, playful problem-solving, and conceptual intuition. Created by high school student Daniel Wen, Limits Redesigned aims to make calculus more approachable for middle and high school students and anyone curious about mathematics.
 
-The current experience introduces limits through an interactive lesson and includes an in-progress continuity lesson. Rather than presenting calculus as a wall of formulas, it invites students to experiment, notice patterns, and build understanding through guided interaction.
+The current site includes a public homepage, project About page, feedback page, and an interactive limits lesson. A separate continuity lesson is available as a template, but is not linked from the main site navigation. Rather than presenting calculus as a wall of formulas, the experience invites learners to experiment, notice patterns, and build understanding through guided interaction.
 
 ## Overview
 
-Limits Redesigned (branded on the site as Calculus Explorer) is a lightweight educational website built with static HTML, CSS, and JavaScript. It is intended to supplement traditional learning rather than replace it, and to make calculus feel more engaging and human.
+Limits Redesigned is a lightweight educational website built with static HTML, CSS, and JavaScript. It is intended to supplement traditional learning rather than replace it, and to make calculus feel more engaging and human.
 
 This project is especially aimed at students who may be:
 
@@ -39,23 +39,22 @@ This project is not limited to the scope of a standard AP Calculus course. It ai
 
 ## What this project is and is not
 
-This project is intended to supplement learning, not replace a traditional calculus course or the value of solving many practice problems. Building mathematical fluency and muscle memory still requires repetition, guided instruction, and regular problem solving.
+The project focuses on introducing ideas intuitively and helping learners understand why a concept matters, how it behaves, and how it connects to visual and real-world patterns.
 
-The focus here is on introducing ideas intuitively and helping students understand why a concept matters, how it behaves, and how it connects to visual and real-world patterns.
-
-> This is not intended to replace a traditional calculus course or the practice needed to build mathematical muscle memory. Instead, it is meant to supplement and enrich the learning experience in a more engaging and intuitive way. The project focuses primarily on introducing concepts and helping learners understand them intuitively, with fewer practice problems because there are many excellent resources available online for that kind of repetition and skill-building.
+> This project is NOT intended to replace a traditional calculus course or practice solving problems. Building mathematical fluency and muscle memory still requires repetition, guided instruction, and regular problem solving.
 
 ## Tech stack
 
 - HTML5
 - CSS3
 - JavaScript
-- Google Forms for feedback collection
 - Desmos API for interactive graphs
 - KaTeX for mathematical notation
+- Google Forms for feedback collection
+- Google Analytics
 - Multi-page static site hosted on GitHub Pages
 
-The project is intentionally lightweight and portable. The pages load Desmos and KaTeX from external services, so an internet connection is needed for graphs and rendered math. Feedback is submitted through an embedded Google Form, with a direct link available as a fallback. GitHub Pages serves the site without a backend.
+The project is intentionally lightweight and portable, with no application backend. The lesson loads Desmos and KaTeX from external services, and feedback is collected through an embedded Google Form with a direct-link fallback. An internet connection is needed for these services and Google Analytics.
 
 ## Run locally
 
@@ -68,27 +67,32 @@ Open `index.html` in a browser, or serve the project directory with `python3 -m 
 - Minimal tooling and dependency overhead
 - Designed for quick iteration and experimentation
 
-## Project status
+## Current experience
 
-This project is actively under development. The limits lesson is the primary interactive lesson. A continuity lesson is also present at `page2.html`, but is labeled template-only and is not yet linked from the main navigation. Derivatives and integrals are not currently covered by the site. The current goal is to keep the experience accessible, conceptually rich, and easy to expand over time.
+- **Homepage and About page:** introduce the project's mission to make math feel more intuitive, visual, and exploratory.
+- **Limits lesson:** the main interactive lesson, using a car scenario, graphs, guided questions, hints, answer reveals, and retry prompts to explore limit intuition and notation. It also provides theme and motion controls.
+- **Continuity template:** `page2.html` contains a separate, template-only lesson with guided questions about continuity and discontinuities. It is not linked from the main navigation and should be considered experimental.
+- **Feedback page:** lets visitors share feedback through an embedded Google Form.
+
+The site currently focuses on limits; derivatives and integrals are not covered. The project is still under development, with the goal of keeping the experience accessible, conceptually rich, and easy to expand.
 
 ## Live demo
 
-- https://qorvinbishop.github.io/limits-redesigned/page1.html/
+- https://qorvinbishop.github.io/limits-redesigned/
 
 ## Project structure
 
 The repository currently includes:
 
-- `index.html` — Calculus Explorer homepage
+- `index.html` — homepage
 - `about.html` — project mission and background
 - `page1.html` / `page1.js` — interactive limits lesson, including Desmos graphs, theme and motion controls, and guided questions
 - `page2.html` / `page2.js` — template-only continuity lesson with interactive questions
 - `global.css` — shared styling
-- `feedback.html` — feedback page with the embedded Google Form and direct-link fallback
-- `GOOGLE_FORM_QUESTIONS.md` — copy-ready form title, description, questions, and choices
+- `feedback.html` — feedback page and embedded Google Form
+- `local/GOOGLE_FORM_QUESTIONS.md` — copy-ready feedback form content
 
-Older backend code, the earlier `v1/` prototype, and project/presentation documents are kept in the ignored `local/archive/` folder on the working computer; they are not part of the GitHub Pages site or repository.
+The working copy also contains ignored older backend code, the earlier `v1/` prototype, and project/presentation documents under `local/archive/`. These files are not part of the tracked repository or the GitHub Pages site.
 
 ## Credits and acknowledgments
 
